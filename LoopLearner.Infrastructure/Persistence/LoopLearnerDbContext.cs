@@ -1,5 +1,8 @@
 using LoopLearner.Application.Contracts.Services;
 using LoopLearner.Domain.Common.Interfaces;
+using LoopLearner.Domain.SongAggregate;
+using LoopLearner.Domain.SongAggregate.Entities;
+using LoopLearner.Domain.SongAggregate.ValueObjects;
 using LoopLearner.Domain.UserAggregate;
 using LoopLearner.Infrastructure.Persistence.Configuration;
 using LoopLearner.Infrastructure.Persistence.Interceptors;
@@ -8,25 +11,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LoopLearner.Infrastructure.Persistence;
 
-public class LoopLearnerDbContext : DbContext
+public class LoopLearnerDbContext(
+    DbContextOptions<LoopLearnerDbContext> options,
+    IDateTimeProvider dateTimeProvider,
+    IPasswordHasher<User> passwordHasher,
+    PublishDomainEventInterceptor publishDomainEventInterceptor,
+    AuditableInterceptor auditableInterceptor)
+    : DbContext(options)
 {
-    private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IPasswordHasher<User> _passwordHasher;
-    private readonly PublishDomainEventInterceptor _publishDomainEventInterceptor;
-    private readonly AuditableInterceptor _auditableInterceptor;
+    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider ?? throw new ArgumentNullException(nameof(dateTimeProvider));
+    public DbSet<User> Users { get; init; } = null!;
+    public DbSet<Song> Songs { get; set; } = null!;
+    public DbSet<Note> Notes { get; set; } = null!;
+    public DbSet<NotePosition> NotePositions { get; set; } = null!;
+    public DbSet<InstrumentPart> InstrumentParts { get; set; } = null!;
+    public DbSet<Chord> Chords { get; set; }
 
-    public DbSet<User> Users { get; set; } = null!;
-
-    public LoopLearnerDbContext(DbContextOptions<LoopLearnerDbContext> options, IDateTimeProvider dateTimeProvider, IPasswordHasher<User> passwordHasher, PublishDomainEventInterceptor publishDomainEventInterceptor, AuditableInterceptor auditableInterceptor) : base(options)
-    {
-        _dateTimeProvider = dateTimeProvider ?? throw new ArgumentNullException(nameof(dateTimeProvider));
-        _passwordHasher = passwordHasher;
-        _publishDomainEventInterceptor = publishDomainEventInterceptor;
-        _auditableInterceptor = auditableInterceptor;
-    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.AddInterceptors(_publishDomainEventInterceptor, _auditableInterceptor);
+        optionsBuilder.AddInterceptors(publishDomainEventInterceptor, auditableInterceptor);
         base.OnConfiguring(optionsBuilder);
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,7 +39,7 @@ public class LoopLearnerDbContext : DbContext
 
         AuditableConfiguration.Configure(modelBuilder);
 
-        DataSeed.Seed(modelBuilder, _passwordHasher, _dateTimeProvider);
+        DataSeed.Seed(modelBuilder, passwordHasher);
         base.OnModelCreating(modelBuilder);
     }
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)

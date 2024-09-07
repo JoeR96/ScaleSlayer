@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace LoopLearner.Web.Server.Controllers;
 
-[Authorize]
+// [Authorize]
 [ApiController]
 [ProducesErrorResponseType(typeof(ProblemDetails))]
 [ProducesResponseType(typeof(ProblemDetails), statusCode: StatusCodes.Status500InternalServerError)]

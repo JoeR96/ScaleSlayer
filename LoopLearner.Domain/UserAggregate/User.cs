@@ -11,7 +11,7 @@ public class User : AggregateRoot<UserId>
     public string LastName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
-    private User() { } // for EF Core
+    private User() { } 
     private User(UserId id, string firstName, string lastName, string userName, string email, string password)
     {
         Id = id;

@@ -102,6 +102,9 @@ namespace LoopLearner.Infrastructure
             services.AddScoped<PublishDomainEventInterceptor>();
             services.AddScoped<AuditableInterceptor>();
             services.AddScoped<IUserRespository, UserRepository>();
+            services.AddScoped<ISongRepository, SongRepository>();
+            services.AddScoped<IInstrumentPartRepository, InstrumentPartRepository>();
+            services.AddScoped<INoteRepository, NoteRepository>();
             return services;
         }
 

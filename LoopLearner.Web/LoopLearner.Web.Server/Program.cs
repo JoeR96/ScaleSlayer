@@ -1,14 +1,21 @@
+using System.Text.Json.Serialization;
 using LoopLearner.Application;
 using LoopLearner.Infrastructure;
+using LoopLearner.Infrastructure.Persistence;
 using LoopLearner.Web.Server;
 using LoopLearner.Web.Server.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>
@@ -68,4 +75,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.UseCors();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<LoopLearnerDbContext>();
+
+    // Ensure the database is created and apply any migrations
+    await context.Database.MigrateAsync();
+    // await DataSeed.SeedNotes(context);
+    //
+    // // Seed the standard tuning chords (chords depend on notes being present)
+    // await DataSeed.SeedStandardTuningOpenChords(context);
+}
+
 app.Run();

@@ -5,7 +5,7 @@ namespace LoopLearner.Domain.UserAggregate.ValueObjects;
 public record UserId : IValueObject
 {
     public Guid Value { get; private set; }
-    private UserId() { } // for EF Core
+    private UserId() { } 
     private UserId(Guid value)
     {
         Value = value;
