@@ -3,6 +3,7 @@ using System;
 using LoopLearner.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoopLearner.Web.Server.Migrations
 {
     [DbContext(typeof(LoopLearnerDbContext))]
-    partial class LoopLearnerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240908001126_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -59,31 +62,6 @@ namespace LoopLearner.Web.Server.Migrations
                     b.ToTable("Chords");
                 });
 
-            modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.FretNote", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("NotePositionId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("TabId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NotePositionId")
-                        .IsUnique();
-
-                    b.HasIndex("TabId");
-
-                    b.ToTable("Notes");
-                });
-
             modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.InstrumentPart", b =>
                 {
                     b.Property<Guid>("Id")
@@ -102,6 +80,31 @@ namespace LoopLearner.Web.Server.Migrations
                     b.HasIndex("SongId");
 
                     b.ToTable("InstrumentParts");
+                });
+
+            modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.Note", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NoteName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("NotePositionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TabId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotePositionId")
+                        .IsUnique();
+
+                    b.HasIndex("TabId");
+
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.Tab", b =>
@@ -211,92 +214,92 @@ namespace LoopLearner.Web.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cdbf762b-5d6b-4e1e-8a46-c95857927838"),
+                            Id = new Guid("79bab614-7901-4bb0-8c83-612985175bd7"),
                             Email = "lincoln.abraham@example.com",
                             FirstName = "Abraham",
                             LastName = "Lincoln",
-                            Password = "AQAAAAIAAYagAAAAECQzvtNEq0MDwof5HWHGKacXW0Dv+vqAHPFUBDqsmMDtFhyhvCSbIFYoHDzQrWk+Lw==",
+                            Password = "AQAAAAIAAYagAAAAEEfW9z+/mabX822Xu9oLVe5pbh4fSQUvJi95ZPEyjWWaCbtLHLOFyw6dPILygQUI9w==",
                             UserName = "alincoln"
                         },
                         new
                         {
-                            Id = new Guid("60d3a9f7-d927-4662-b79d-6cfee3199690"),
+                            Id = new Guid("e912d3fe-602e-4d6d-9912-1a71818cc401"),
                             Email = "caesar.julius@example.com",
                             FirstName = "Julius",
                             LastName = "Caesar",
-                            Password = "AQAAAAIAAYagAAAAEKNsYMMRBiW6kXnqC1myGoXHHpz42QOntH2KPJhTYYjsEsDQCtPjphpUJLqV630dhQ==",
+                            Password = "AQAAAAIAAYagAAAAENx2RXiFov8+B6xy4asTZ0ndXuoOsuxmAMLUb3wrq7Yhv0eNCm0JjzBpUdPtlUJxHg==",
                             UserName = "jcaesar"
                         },
                         new
                         {
-                            Id = new Guid("4a317b47-410c-4d9b-9155-5bcd606f4138"),
+                            Id = new Guid("e0ccbcce-77ab-43b0-9ce6-415a4ee9fe96"),
                             Email = "einstein.albert@example.com",
                             FirstName = "Albert",
                             LastName = "Einstein",
-                            Password = "AQAAAAIAAYagAAAAEP5eIk4PlTqJ2GP3wYNCkVbImmogutMbIySka4DI88V5Dr8Hrik771EjM40/Rt4DDg==",
+                            Password = "AQAAAAIAAYagAAAAEEXABvgGx6J/JHw1d/k31FFgZKyF4McA1YO6graSNN2mWSbp/42PkqVx/0BB7tL0VQ==",
                             UserName = "aeinstein"
                         },
                         new
                         {
-                            Id = new Guid("9dd17f36-4f05-4e4e-8dc4-7148f63868c9"),
+                            Id = new Guid("32b86004-c72d-42b9-9037-0bc3ca3df34d"),
                             Email = "curie.marie@example.com",
                             FirstName = "Marie",
                             LastName = "Curie",
-                            Password = "AQAAAAIAAYagAAAAEK9syNbBXARNCgIqHe5wH7FRLLaDKRo6ROs6oy7/B6Qvw+GnM1vjNVKQIa1xAutZww==",
+                            Password = "AQAAAAIAAYagAAAAEOF1DgPSj5J/z9yceOfXRHsH7/rf1i9mnIJl66feELVhz/JIMUbEHyaWMZKIRaFkdg==",
                             UserName = "mcurie"
                         },
                         new
                         {
-                            Id = new Guid("fa4a4272-afeb-4ee6-911c-5a77ec8d9fd8"),
+                            Id = new Guid("164186cd-a55a-489f-990f-0f306a54e9bc"),
                             Email = "davinci.leonardo@example.com",
                             FirstName = "Leonardo",
                             LastName = "da Vinci",
-                            Password = "AQAAAAIAAYagAAAAEHCtSkIpDONKvWznJ6cSYPIluw6Ay5sbUOucGHrPYxLuYWbfP5A4WHW3GfaA++eLPA==",
+                            Password = "AQAAAAIAAYagAAAAEGkCoFQWyy40sDUoXWUBdmJdjdpUIEACRlBEw2rS+oEeKIZ0JNoAzMc9okpT+j3oeg==",
                             UserName = "ldavinci"
                         },
                         new
                         {
-                            Id = new Guid("f133f2d3-2eb1-4e07-998c-fcfde273ed18"),
+                            Id = new Guid("59fec155-df3d-450a-b7b1-fed722a36e58"),
                             Email = "shakespeare.william@example.com",
                             FirstName = "William",
                             LastName = "Shakespeare",
-                            Password = "AQAAAAIAAYagAAAAEJYavB1fBfA2Bg8nbuR11WnHVSPtYolsPGqAAi1w3kc/jPioGpNrY+W+bKUnBKgcew==",
+                            Password = "AQAAAAIAAYagAAAAEFM3UboO36XEQCYexfK1L08dbn/5bl9cSPxN5QvO6PsP7ATydN++8AaHnLaw2JdWUA==",
                             UserName = "wshakespeare"
                         },
                         new
                         {
-                            Id = new Guid("2ea77b24-787b-4ec5-8a7a-1233b7c6935d"),
+                            Id = new Guid("16ba4d12-8187-40b1-a366-42eea5399a06"),
                             Email = "cleopatra@example.com",
                             FirstName = "Cleopatra",
                             LastName = "",
-                            Password = "AQAAAAIAAYagAAAAEBPxnfKoQ2YA4BXc3Enk7M8PuucBY0pTZ0AJPXwpU+PK+sz950hJfX7mjASW6wSxqQ==",
+                            Password = "AQAAAAIAAYagAAAAEB1kRcuT11E8k+ivEgTHC0wATctqOTzxTqYqwR7CnqddQgvIYkj8ZEsmHq39Xhe8DA==",
                             UserName = "ccleopatra"
                         },
                         new
                         {
-                            Id = new Guid("dd341f8b-5b8b-4bd5-8aaa-1c8ef3d6f649"),
+                            Id = new Guid("03280f59-2df0-41b3-8d4d-115c84aea6c6"),
                             Email = "alexander@example.com",
                             FirstName = "Alexander",
                             LastName = "the Great",
-                            Password = "AQAAAAIAAYagAAAAELJsT2IwGuS9fqzp03DmRm88Vk69O6iHO0GK613En98UzdVhOqzVomiACN8Zq9irrQ==",
+                            Password = "AQAAAAIAAYagAAAAED1GbI9JFt6JFhkrHwaR/cXyJCrT3Fs07kMR7v8oeew2ej0jfidWF8/cN2MaW6YrnA==",
                             UserName = "aalexander"
                         },
                         new
                         {
-                            Id = new Guid("6acaed02-6819-4621-8cab-780e80251f13"),
+                            Id = new Guid("2c84c8fb-1565-48f0-966b-f961f59b8cdb"),
                             Email = "tesla.nikola@example.com",
                             FirstName = "Nikola",
                             LastName = "Tesla",
-                            Password = "AQAAAAIAAYagAAAAEFG1kqlPZcfc1VfklyUoA+9MjWlHMHUIH+3gD1MIbQ5/kqxl3Ft3gSZNOwJ4cyt5fA==",
+                            Password = "AQAAAAIAAYagAAAAEOIl62jkF6sh2nnsTmYtTUQ03HqPvTVI7P+Jg1xM+kwEDLOXYrkUKDY0h0ANbroBAg==",
                             UserName = "ntesla"
                         },
                         new
                         {
-                            Id = new Guid("cd905263-fd06-4097-b6e7-8c5286d71722"),
+                            Id = new Guid("7e94c2a8-8da4-4951-b709-b950486bfa3e"),
                             Email = "genghis.khan@example.com",
                             FirstName = "Genghis",
                             LastName = "Khan",
-                            Password = "AQAAAAIAAYagAAAAEBorg17HcHsdYzcbn8ZcFTHdjWzVMW5afI04DkkPXm3n0uEqZ/2SmqTvT/BaF2TdAA==",
+                            Password = "AQAAAAIAAYagAAAAEBOghTtNNea5lnOXAexhL40ZHFjCZAM94Fj60T7mBl4a3gEo3KX9G9I749fzqpEzTw==",
                             UserName = "wgenghis"
                         });
                 });
@@ -309,7 +312,7 @@ namespace LoopLearner.Web.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LoopLearner.Domain.SongAggregate.Entities.FretNote", null)
+                    b.HasOne("LoopLearner.Domain.SongAggregate.Entities.Note", null)
                         .WithMany()
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -323,11 +326,20 @@ namespace LoopLearner.Web.Server.Migrations
                         .HasForeignKey("TabId");
                 });
 
-            modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.FretNote", b =>
+            modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.InstrumentPart", b =>
+                {
+                    b.HasOne("LoopLearner.Domain.SongAggregate.Song", null)
+                        .WithMany("InstrumentParts")
+                        .HasForeignKey("SongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.Note", b =>
                 {
                     b.HasOne("LoopLearner.Domain.SongAggregate.ValueObjects.NotePosition", "Position")
                         .WithOne()
-                        .HasForeignKey("LoopLearner.Domain.SongAggregate.Entities.FretNote", "NotePositionId")
+                        .HasForeignKey("LoopLearner.Domain.SongAggregate.Entities.Note", "NotePositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -336,15 +348,6 @@ namespace LoopLearner.Web.Server.Migrations
                         .HasForeignKey("TabId");
 
                     b.Navigation("Position");
-                });
-
-            modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.InstrumentPart", b =>
-                {
-                    b.HasOne("LoopLearner.Domain.SongAggregate.Song", null)
-                        .WithMany("InstrumentParts")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("LoopLearner.Domain.SongAggregate.Entities.Tab", b =>

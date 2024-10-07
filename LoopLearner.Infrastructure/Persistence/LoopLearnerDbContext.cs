@@ -22,7 +22,7 @@ public class LoopLearnerDbContext(
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider ?? throw new ArgumentNullException(nameof(dateTimeProvider));
     public DbSet<User> Users { get; init; } = null!;
     public DbSet<Song> Songs { get; set; } = null!;
-    public DbSet<Note> Notes { get; set; } = null!;
+    public DbSet<FretNote> Notes { get; set; } = null!;
     public DbSet<NotePosition> NotePositions { get; set; } = null!;
     public DbSet<InstrumentPart> InstrumentParts { get; set; } = null!;
     public DbSet<Chord> Chords { get; set; }

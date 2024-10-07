@@ -83,10 +83,9 @@ using (var scope = app.Services.CreateScope())
 
     // Ensure the database is created and apply any migrations
     await context.Database.MigrateAsync();
-    // await DataSeed.SeedNotes(context);
-    //
-    // // Seed the standard tuning chords (chords depend on notes being present)
-    // await DataSeed.SeedStandardTuningOpenChords(context);
+     // await DataSeed.SeedNotes(context);
+     // await DataSeed.SeedStandardTuningOpenChords(context);
+     // await DataSeed.SeedCSharpMinorScaleChords(context);
 }
 
 app.Run();

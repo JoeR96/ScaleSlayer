@@ -6,7 +6,7 @@ using LoopLearner.Domain.SongAggregate.Entities;
 
 namespace LoopLearner.Application.Songs.Queries;
 
-public class GetAllNotesQueryHandler : IRequestHandler<GetAllNotesQuery, Result<IEnumerable<Note>, Error>>
+public class GetAllNotesQueryHandler : IRequestHandler<GetAllNotesQuery, Result<IEnumerable<FretNote>, Error>>
 {
     private readonly INoteRepository _noteRepository;
 
@@ -15,7 +15,7 @@ public class GetAllNotesQueryHandler : IRequestHandler<GetAllNotesQuery, Result<
         _noteRepository = noteRepository ?? throw new ArgumentNullException(nameof(noteRepository));
     }
 
-    public async Task<Result<IEnumerable<Note>, Error>> Handle(GetAllNotesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<FretNote>, Error>> Handle(GetAllNotesQuery request, CancellationToken cancellationToken)
     {
         var notes = await _noteRepository.GetAllNotesAsync(cancellationToken);
 

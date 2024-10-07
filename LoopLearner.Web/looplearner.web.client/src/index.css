@@ -25,9 +25,21 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  justify-content: center; /* Center horizontally */
+  align-items: center;    /* Center vertically */
   min-width: 320px;
   min-height: 100vh;
+}
+
+#app {
+  width: 100%;
+  max-width: 1200px; /* Set a max width */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
 }
 
 h1 {

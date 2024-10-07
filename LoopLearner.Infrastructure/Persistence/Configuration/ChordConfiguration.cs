@@ -17,15 +17,15 @@ public class ChordConfiguration : IEntityTypeConfiguration<Chord>
 
         builder.Property(e => e.RootNote)
             .HasConversion(rootNote => rootNote.ToString(), 
-                value => (NoteName)Enum.Parse(typeof(NoteName), value))
+                value => (Note)Enum.Parse(typeof(Note), value))
             .IsRequired();
 
-        builder.Property(e => e.Type)
+        builder.Property(e => e.ChordType)
             .HasConversion(type => type.ToString(), 
                 value => (ChordType)Enum.Parse(typeof(ChordType), value))
             .IsRequired();
 
-        builder.Property(e => e.Extension)
+        builder.Property(e => e.ChordExtension)
             .HasConversion(extension => extension.ToString(), 
                 value => (ChordExtension)Enum.Parse(typeof(ChordExtension), value));
 
@@ -34,7 +34,7 @@ public class ChordConfiguration : IEntityTypeConfiguration<Chord>
             .WithMany()  // Assuming no navigation property back from Note to Chord
             .UsingEntity<Dictionary<string, object>>(
                 "ChordNote", // Join table name
-                j => j.HasOne<Note>()
+                j => j.HasOne<FretNote>()
                     .WithMany()
                     .HasForeignKey("NoteId")
                     .OnDelete(DeleteBehavior.Cascade),

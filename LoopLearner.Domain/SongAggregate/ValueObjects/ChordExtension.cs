@@ -9,5 +9,6 @@ public enum ChordExtension
     Sixth,     
     Ninth,       
     Eleventh,    
-    Thirteenth  
+    Thirteenth,
+    Seventh
 }

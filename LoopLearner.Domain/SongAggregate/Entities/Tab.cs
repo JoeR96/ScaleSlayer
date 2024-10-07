@@ -6,9 +6,9 @@ namespace LoopLearner.Domain.SongAggregate.Entities;
 public class Tab : Entity<TabId>
 {
     private readonly List<Chord> _chords = new List<Chord>();
-    private readonly List<Note> _notes = new List<Note>();
+    private readonly List<FretNote> _notes = new List<FretNote>();
     public IReadOnlyList<Chord> Chords => _chords.ToList();
-    public IReadOnlyList<Note> Notes => _notes.ToList();
+    public IReadOnlyList<FretNote> Notes => _notes.ToList();
 
     private Tab() { } // For EF Core
     private Tab(TabId id)
@@ -23,9 +23,9 @@ public class Tab : Entity<TabId>
         _chords.Add(chord);
     }
 
-    public void AddNote(Note note)
+    public void AddNote(FretNote fretNote)
     {
-        _notes.Add(note);
+        _notes.Add(fretNote);
     }
 
     public override string ToString()

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LoopLearner.Web.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -114,8 +114,8 @@ namespace LoopLearner.Web.Server.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     RootNote = table.Column<string>(type: "TEXT", nullable: false),
-                    Type = table.Column<string>(type: "TEXT", nullable: false),
-                    Extension = table.Column<string>(type: "TEXT", nullable: false),
+                    ChordType = table.Column<string>(type: "TEXT", nullable: false),
+                    ChordExtension = table.Column<string>(type: "TEXT", nullable: false),
                     TabId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -182,16 +182,16 @@ namespace LoopLearner.Web.Server.Migrations
                 columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("03015f65-81f3-4459-84e3-0bc7317a9af2"), "davinci.leonardo@example.com", "Leonardo", "da Vinci", "AQAAAAIAAYagAAAAEEzMse4yMlTpEO3b1nLo3ZPv4pi1A3AO2UhOKXsKhTpeFF+UrvtpTH61z5Al1MEQbQ==", "ldavinci" },
-                    { new Guid("29352334-6241-4959-93fa-96af9fb93e22"), "tesla.nikola@example.com", "Nikola", "Tesla", "AQAAAAIAAYagAAAAEOKQVZdLfAvr/ot90jEg/3pp3DXFjzTXfrKV5FkSeAV/khBehrK0TWdA0tt9u6uZcw==", "ntesla" },
-                    { new Guid("700df619-b907-4473-8c39-c68606a27688"), "lincoln.abraham@example.com", "Abraham", "Lincoln", "AQAAAAIAAYagAAAAEM2F6fKnc7N2Ge5orlv5KBqD+dorYvRmZ2XZNqU4rGLdqzvGI4PV3QpponEedVj1VA==", "alincoln" },
-                    { new Guid("a16341a2-bcf3-4f1d-b083-d1b74d0eb281"), "einstein.albert@example.com", "Albert", "Einstein", "AQAAAAIAAYagAAAAELRKJpPlWLe3XFiBOGGA0YluB4ZhFFiXllCoHhNZQQtr2WpAGWLgZMuPwiIMXAVdng==", "aeinstein" },
-                    { new Guid("ab843922-d6b6-4a5d-a7f8-1190fec9c702"), "shakespeare.william@example.com", "William", "Shakespeare", "AQAAAAIAAYagAAAAEEK8VvM/VDNjjgJlF/iyjTLfb9Qo5U0Bup8B/LKR0XtyWi3yJi3AaNsHU1dYSciERA==", "wshakespeare" },
-                    { new Guid("c882368a-7d59-4c49-8ffb-a515d3d43780"), "curie.marie@example.com", "Marie", "Curie", "AQAAAAIAAYagAAAAELWD/i/uC62nMsby8zncrPcFqoyuh3U8NjyYgY2CigyG/b8XB70JnO/WYUztPDnr3Q==", "mcurie" },
-                    { new Guid("cd694460-d9ba-4f99-888d-f7748f9a690f"), "alexander@example.com", "Alexander", "the Great", "AQAAAAIAAYagAAAAEMie/CLh0MTOYbuFysOn8/n0oLhLN/Alg1hTKvXCvuwVG+VVlKoN/WD159dvLYPUzw==", "aalexander" },
-                    { new Guid("dd4bf13a-50ab-4a9b-b931-5d232e0bdb77"), "caesar.julius@example.com", "Julius", "Caesar", "AQAAAAIAAYagAAAAEGjMBmI0euCu1+nMahnJ2YvsV5/Vp/pdsceElRsmPYn4pnzFfmXnl5EIAnzETGac2g==", "jcaesar" },
-                    { new Guid("ee50e2a3-7524-4cc9-abb8-14965fb35bb9"), "cleopatra@example.com", "Cleopatra", "", "AQAAAAIAAYagAAAAEF4mn3gHuqYCm9UD0Flms1Nk6R3t5jjB1pkIqSpbPVGdJdMOVIIYzH2J2qpEsijksw==", "ccleopatra" },
-                    { new Guid("ef353976-8fdf-4cba-a70d-ca00c27226ce"), "genghis.khan@example.com", "Genghis", "Khan", "AQAAAAIAAYagAAAAELWqwsm7mLI4BR/HM1XwJ1y07nxj4b/jCGMPHaVqrkGoBott1D9Dc2kXo1+ExhkfmA==", "wgenghis" }
+                    { new Guid("03280f59-2df0-41b3-8d4d-115c84aea6c6"), "alexander@example.com", "Alexander", "the Great", "AQAAAAIAAYagAAAAED1GbI9JFt6JFhkrHwaR/cXyJCrT3Fs07kMR7v8oeew2ej0jfidWF8/cN2MaW6YrnA==", "aalexander" },
+                    { new Guid("164186cd-a55a-489f-990f-0f306a54e9bc"), "davinci.leonardo@example.com", "Leonardo", "da Vinci", "AQAAAAIAAYagAAAAEGkCoFQWyy40sDUoXWUBdmJdjdpUIEACRlBEw2rS+oEeKIZ0JNoAzMc9okpT+j3oeg==", "ldavinci" },
+                    { new Guid("16ba4d12-8187-40b1-a366-42eea5399a06"), "cleopatra@example.com", "Cleopatra", "", "AQAAAAIAAYagAAAAEB1kRcuT11E8k+ivEgTHC0wATctqOTzxTqYqwR7CnqddQgvIYkj8ZEsmHq39Xhe8DA==", "ccleopatra" },
+                    { new Guid("2c84c8fb-1565-48f0-966b-f961f59b8cdb"), "tesla.nikola@example.com", "Nikola", "Tesla", "AQAAAAIAAYagAAAAEOIl62jkF6sh2nnsTmYtTUQ03HqPvTVI7P+Jg1xM+kwEDLOXYrkUKDY0h0ANbroBAg==", "ntesla" },
+                    { new Guid("32b86004-c72d-42b9-9037-0bc3ca3df34d"), "curie.marie@example.com", "Marie", "Curie", "AQAAAAIAAYagAAAAEOF1DgPSj5J/z9yceOfXRHsH7/rf1i9mnIJl66feELVhz/JIMUbEHyaWMZKIRaFkdg==", "mcurie" },
+                    { new Guid("59fec155-df3d-450a-b7b1-fed722a36e58"), "shakespeare.william@example.com", "William", "Shakespeare", "AQAAAAIAAYagAAAAEFM3UboO36XEQCYexfK1L08dbn/5bl9cSPxN5QvO6PsP7ATydN++8AaHnLaw2JdWUA==", "wshakespeare" },
+                    { new Guid("79bab614-7901-4bb0-8c83-612985175bd7"), "lincoln.abraham@example.com", "Abraham", "Lincoln", "AQAAAAIAAYagAAAAEEfW9z+/mabX822Xu9oLVe5pbh4fSQUvJi95ZPEyjWWaCbtLHLOFyw6dPILygQUI9w==", "alincoln" },
+                    { new Guid("7e94c2a8-8da4-4951-b709-b950486bfa3e"), "genghis.khan@example.com", "Genghis", "Khan", "AQAAAAIAAYagAAAAEBOghTtNNea5lnOXAexhL40ZHFjCZAM94Fj60T7mBl4a3gEo3KX9G9I749fzqpEzTw==", "wgenghis" },
+                    { new Guid("e0ccbcce-77ab-43b0-9ce6-415a4ee9fe96"), "einstein.albert@example.com", "Albert", "Einstein", "AQAAAAIAAYagAAAAEEXABvgGx6J/JHw1d/k31FFgZKyF4McA1YO6graSNN2mWSbp/42PkqVx/0BB7tL0VQ==", "aeinstein" },
+                    { new Guid("e912d3fe-602e-4d6d-9912-1a71818cc401"), "caesar.julius@example.com", "Julius", "Caesar", "AQAAAAIAAYagAAAAENx2RXiFov8+B6xy4asTZ0ndXuoOsuxmAMLUb3wrq7Yhv0eNCm0JjzBpUdPtlUJxHg==", "jcaesar" }
                 });
 
             migrationBuilder.CreateIndex(

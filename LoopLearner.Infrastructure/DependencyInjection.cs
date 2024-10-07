@@ -105,6 +105,7 @@ namespace LoopLearner.Infrastructure
             services.AddScoped<ISongRepository, SongRepository>();
             services.AddScoped<IInstrumentPartRepository, InstrumentPartRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();
+            services.AddScoped<IChordRepository, ChordRepository>();
             return services;
         }
 

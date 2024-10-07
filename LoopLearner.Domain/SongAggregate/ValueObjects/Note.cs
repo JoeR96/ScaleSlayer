@@ -1,6 +1,6 @@
 namespace LoopLearner.Domain.SongAggregate.ValueObjects;
 
-public enum NoteName
+public enum Note
 {
     A,
     ASharp,

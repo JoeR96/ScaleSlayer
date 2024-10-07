@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LoopLearner.Infrastructure.Persistence.Configuration;
 
-public class NoteConfiguration : IEntityTypeConfiguration<Note>
+public class NoteConfiguration : IEntityTypeConfiguration<FretNote>
 {
-    public void Configure(EntityTypeBuilder<Note> builder)
+    public void Configure(EntityTypeBuilder<FretNote> builder)
     {
         // Configure primary key
         builder.HasKey(n => n.Id);
@@ -17,12 +17,12 @@ public class NoteConfiguration : IEntityTypeConfiguration<Note>
 
         builder.HasOne(n => n.Position)
             .WithOne()
-            .HasForeignKey<Note>("NotePositionId")
+            .HasForeignKey<FretNote>("NotePositionId")
             .IsRequired(); 
 
-        builder.Property(n => n.NoteName)
+        builder.Property(n => n.Note)
             .HasConversion(noteName => noteName.ToString(), 
-                value => (NoteName)Enum.Parse(typeof(NoteName), value))
+                value => (Note)Enum.Parse(typeof(Note), value))
             .IsRequired();
     }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import GuitarFretboard from "./GuitarFretboard";
 
 function App() {
     const [forecasts, setForecasts] = useState();
@@ -33,14 +34,13 @@ function App() {
 
     return (
         <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
+            <h1 id="tableLabel">What a cool hobby</h1>
+            <GuitarFretboard/>
         </div>
     );
     
     async function populateWeatherData() {
-        const response = await fetch('weather');
+        const response = await fetch('api/weather');
         console.log(response)
         const data = await response.json();
         setForecasts(data);

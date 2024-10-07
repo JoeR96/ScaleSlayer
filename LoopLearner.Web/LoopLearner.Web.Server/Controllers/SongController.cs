@@ -68,7 +68,7 @@ public class SongController : ApiControllerBase
     }
 
     [HttpGet("notes")]
-    [ProducesResponseType(typeof(IEnumerable<Note>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<FretNote>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> GetAllNotes(CancellationToken cancellationToken)
