@@ -36,7 +36,7 @@ namespace LoopLearner.Application.Scales.Queries
         {
             var noteNames = GetScaleNoteNames(request.RootNote, request.ScaleType);
             var notes = await _noteRepository.GetFretNotesByNamesAsync(noteNames, cancellationToken);
-            var boxNotes = GroupNotesIntoBoxes(notes.ToList(), request.RootNote);
+            var boxNotes = GroupNotesIntoBoxes(notes.ToList(), request.RootNote, request.ScaleType);
             return Result.Success(boxNotes);
         }
 
@@ -61,9 +61,10 @@ namespace LoopLearner.Application.Scales.Queries
             }).ToList();
         }
 
-        private Dictionary<ScaleBoxPosition, List<FretNote>> GroupNotesIntoBoxes(List<FretNote> notes, Note rootNote)
+        private Dictionary<ScaleBoxPosition, List<FretNote>> GroupNotesIntoBoxes(List<FretNote> notes, Note rootNote,
+            ScaleType requestScaleType)
         {
-            var boxFretPositions = ResolveBoxFretPositions();
+            var boxFretPositions = ResolveBoxFretPositions(requestScaleType);
             var boxNotes = new Dictionary<ScaleBoxPosition, List<FretNote>>();
 
             //start at 0
@@ -97,17 +98,31 @@ namespace LoopLearner.Application.Scales.Queries
             return fretNumber;
         }
 
-        private Dictionary<ScaleBoxPosition, (int MinFret, int MaxFret)> ResolveBoxFretPositions()
+        private Dictionary<ScaleBoxPosition, (int MinFret, int MaxFret)> ResolveBoxFretPositions(ScaleType scaleType)
         {
-            // Define base positions for the pentatonic scale
-            return new Dictionary<ScaleBoxPosition, (int MinFret, int MaxFret)>
+            if (scaleType == ScaleType.PentatonicMinor)
             {
-                [ScaleBoxPosition.Box1] = (0, 3),   
-                [ScaleBoxPosition.Box2] = (2, 5),   
-                [ScaleBoxPosition.Box3] = (4, 8),   
-                [ScaleBoxPosition.Box4] = (7, 10),   
-                [ScaleBoxPosition.Box5] = (9, 12)   
-            };
+                return new Dictionary<ScaleBoxPosition, (int MinFret, int MaxFret)>
+                {
+                    [ScaleBoxPosition.Box1] = (0, 3),   
+                    [ScaleBoxPosition.Box2] = (2, 5),   
+                    [ScaleBoxPosition.Box3] = (4, 8),   
+                    [ScaleBoxPosition.Box4] = (7, 10),   
+                    [ScaleBoxPosition.Box5] = (9, 12)   
+                };
+            }
+            else // Major/Minor
+            {
+                return new Dictionary<ScaleBoxPosition, (int MinFret, int MaxFret)>
+                {
+                    [ScaleBoxPosition.Box1] = (1, 5),   
+                    [ScaleBoxPosition.Box2] = (4, 8),   
+                    [ScaleBoxPosition.Box3] = (6, 10),   
+                    [ScaleBoxPosition.Box4] = (9, 13),   
+                    [ScaleBoxPosition.Box5] = (11, 15)  
+                };
+            }
         }
+
     }
 }
