@@ -42,6 +42,5 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, Result<Authenticati
 
         return new AuthenticationResponse(user, token);
 
-
     }
 }

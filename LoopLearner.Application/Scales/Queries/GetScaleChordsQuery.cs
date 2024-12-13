@@ -1,6 +1,5 @@
 using CSharpFunctionalExtensions;
 using LoopLearner.Domain.ScaleAggregate.ValueObjects;
-using LoopLearner.Domain.SongAggregate.Entities;
 using LoopLearner.Domain.SongAggregate.ValueObjects;
 
 namespace LoopLearner.Application.Scales.Queries;
