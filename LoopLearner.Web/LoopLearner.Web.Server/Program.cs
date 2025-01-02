@@ -12,10 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    });
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options =>
@@ -84,8 +85,6 @@ using (var scope = app.Services.CreateScope())
     // Ensure the database is created and apply any migrations
     await context.Database.MigrateAsync();
      // await DataSeed.SeedNotes(context);
-     // await DataSeed.SeedStandardTuningOpenChords(context);
-     // await DataSeed.SeedCSharpMinorScaleChords(context);
 }
 
 app.Run();

@@ -63,7 +63,7 @@ const GuitarFretboard: React.FC = () => {
     useEffect(() => {
         const populateNotesData = async () => {
             try {
-                const response = await fetch('api/songs/notes');
+                const response = await fetch('api/notes/notes');
                 if (response.ok) {
                     const data = await response.json();
                     setNotes(data);
@@ -91,48 +91,9 @@ const GuitarFretboard: React.FC = () => {
                 console.error('Error fetching scale notes:', error);
             }
         };
-
-
-
-        const populateScaleAndChordsData = async () => {
-            try {
-                const scaleResponse = await fetch(`api/scales/${selectedRootNote}-${selectedScaleType}`);
-                if (scaleResponse.ok) {
-                    const scaleData = await scaleResponse.json();
-                    setScaleNotes(scaleData);
-                } else {
-                    console.error('Failed to fetch scale notes:', scaleResponse.statusText);
-                }
-
-                const chordsResponse = await fetch(`api/scales/${selectedRootNote}-${selectedScaleType}-chords`);
-                if (chordsResponse.ok) {
-                    const chordsData = await chordsResponse.json();
-                    setChords(chordsData);
-                } else {
-                    console.error('Failed to fetch chords:', chordsResponse.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching scale and chords data:', error);
-            }
-        };
-
-        const populateChordsData = async () => {
-            try {
-                const response = await fetch('api/scales/csharp-minor-pentatonic-chords');
-                if (response.ok) {
-                    const data = await response.json();
-                    setChords(data);
-                } else {
-                    console.error('Failed to fetch chords:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching chords:', error);
-            }
-        };
         
         populateNotesData();
         populateScaleData();
-        populateChordsData();
     }, [selectedRootNote, selectedScaleType]);
 
     const handleToggle = () => {
@@ -159,7 +120,7 @@ const GuitarFretboard: React.FC = () => {
     const totalFrets = 23;
     const fretboardWidth = 800;
 
-    if (!notes || !scaleNotes || !chords) {
+    if (!notes || !scaleNotes) {
         return <p>Loading notes and chords...</p>;
     }
 
@@ -176,11 +137,11 @@ const GuitarFretboard: React.FC = () => {
     };
 
     const handleRootNoteChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedRootNote(e.target.value);
+        setSelectedRootNote(e.target.value as Note);
     };
 
     const handleScaleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedScaleType(e.target.value);
+        setSelectedScaleType(e.target.value as ScaleType);
     };
     
     const renderChordFretboard = (chord: Chord) => {
@@ -191,11 +152,10 @@ const GuitarFretboard: React.FC = () => {
 
         return (
             <svg key={chord.rootNote + chord.chordType} width={chordFretboardWidth} height="120" xmlns="http://www.w3.org/2000/svg">
-                {/* Draw string labels in white */}
                 {strings.map((stringLabel, index) => (
                     <text
                         key={index}
-                        x="10"
+                        x="0"
                         y={15 + index * 20 + 4}
                         style={{ fill: 'white', fontWeight: 'bold' }}  // Use inline style
                         fontSize="10"
@@ -205,7 +165,6 @@ const GuitarFretboard: React.FC = () => {
                     </text>
                 ))}
 
-                {/* Draw strings */}
                 {strings.map((string, index) => (
                     <line
                         key={index}
@@ -218,7 +177,6 @@ const GuitarFretboard: React.FC = () => {
                     />
                 ))}
 
-                {/* Draw frets and fret numbers */}
                 {fretRange.map((fret, index) => (
                     <g key={index}>
                         <line
@@ -240,29 +198,6 @@ const GuitarFretboard: React.FC = () => {
                         </text>
                     </g>
                 ))}
-
-                {/* Draw chord notes */}
-                {chord.notes.map((note, index) => (
-                    <g key={index}>
-                        <circle
-                            cx={(note.position.fretNumber - lowestFret) * chordFretWidth + chordFretWidth / 2}
-                            cy={15 + (note.position.stringNumber - 1) * 20}
-                            r="8"
-                            fill={getNoteColor(note.note)}
-                            stroke="black"
-                            strokeWidth="2"
-                        />
-                        <text
-                            x={(note.position.fretNumber - lowestFret) * chordFretWidth + chordFretWidth / 2}
-                            y={15 + (note.position.stringNumber - 1) * 20 + 4}
-                            fill="white"
-                            fontSize="8"
-                            textAnchor="middle"
-                        >
-                            {formatnote(note.note)}
-                        </text>
-                    </g>
-                ))}
             </svg>
         );
     };
@@ -270,9 +205,9 @@ const GuitarFretboard: React.FC = () => {
     return (
         <div id="app">
             <h2>Guitar Fretboard</h2>
-            <div>
+            <div style={{ marginBottom: '1em' }}>
                 <label>Root Note: </label>
-                <select value={selectedRootNote} onChange={handleRootNoteChange}>
+                <select value={selectedRootNote} onChange={handleRootNoteChange} style={{ margin: '0 1em 1em 0' }}>
                     <option value="C">C</option>
                     <option value="CSharp">C#</option>
                     <option value="D">D</option>
@@ -288,53 +223,26 @@ const GuitarFretboard: React.FC = () => {
                 </select>
 
                 <label> Scale Type: </label>
-                <select value={selectedScaleType} onChange={handleScaleTypeChange}>
+                <select value={selectedScaleType} onChange={handleScaleTypeChange} style={{ margin: '0 1em 1em 0' }}>
                     <option value="PentatonicMinor">Pentatonic Minor</option>
                     <option value="Major">Major</option>
                     <option value="Minor">Minor</option>
-                    {/* Add more scale types as needed */}
+                </select>
+
+                <select onChange={handleToggle} style={{ marginBottom: '1em' }}>
+                    <option value="false" selected={!showScale}>Show All Notes</option>
+                    <option value="true" selected={showScale}>Show Scale Notes</option>
                 </select>
             </div>
-            <button onClick={handleToggle}>
-                {showScale ? 'Show All Notes' : 'Show C# Minor Pentatonic Scale'}
-            </button>
-
-            {showScale && (
-                <div>
-                    <label>
-                        <input
-                            type="checkbox"
-                            onChange={handleSelectAllBoxes}
-                            checked={selectedBoxes.length === 5}
-                        />
-                        Select All Boxes
-                    </label>
-
-                    <div>
-                        {['Box1', 'Box2', 'Box3', 'Box4', 'Box5'].map((box) => (
-                            <label key={box}>
-                                <input
-                                    type="checkbox"
-                                    value={box}
-                                    checked={selectedBoxes.includes(box)}
-                                    onChange={() => handleBoxChange(box)}
-                                />
-                                {box}
-                            </label>
-                        ))}
-                    </div>
-                </div>
-            )}
 
             <svg width={fretboardWidth} height="200" viewBox={`0 0 ${fretboardWidth} 200`}
                  xmlns="http://www.w3.org/2000/svg">
-                {/* Draw string labels in white */}
                 {strings.map((stringLabel, index) => (
                     <text
                         key={index}
-                        x="10"
+                        x="0"
                         y={30 + index * 25 + 4}
-                        style={{fill: 'white', fontWeight: 'bold'}}  // Use inline style
+                        style={{fill: 'white', fontWeight: 'bold'}}
                         fontSize="12"
                         textAnchor="middle"
                     >
@@ -342,7 +250,6 @@ const GuitarFretboard: React.FC = () => {
                     </text>
                 ))}
 
-                {/* Draw strings */}
                 {strings.map((_, index) => (
                     <line
                         key={index}
@@ -355,7 +262,6 @@ const GuitarFretboard: React.FC = () => {
                     />
                 ))}
 
-                {/* Draw frets and fret numbers */}
                 {[...Array(totalFrets).keys()].map((fret, index) => (
                     <g key={index}>
                         <line
@@ -406,20 +312,21 @@ const GuitarFretboard: React.FC = () => {
             </svg>
 
             {showScale && (
-                <>
-                    <h3>C# Minor Pentatonic Chords</h3>
-                    <div style={{display: 'flex', flexWrap: 'wrap', gap: '10px'}}>
-                        {chords.map((chord) => (
-                            <div key={chord.rootNote + chord.chordType} style={{textAlign: 'center', width: '220px'}}>
-                                <h4>
-                                    {chord.rootNote} {chord.chordType}
-                                    {chord.chordExtension !== 'None' ? ` ${chord.chordExtension}` : ''}
-                                </h4>
-                                {renderChordFretboard(chord)}
-                            </div>
+                <div>
+                    <div style={{ marginTop: '1em' }}>
+                        {['Box1', 'Box2', 'Box3', 'Box4', 'Box5'].map((box) => (
+                            <label key={box} style={{ marginRight: '10px' }}>
+                                <input
+                                    type="checkbox"
+                                    value={box}
+                                    checked={selectedBoxes.includes(box)}
+                                    onChange={() => handleBoxChange(box)}
+                                />
+                                {box}
+                            </label>
                         ))}
                     </div>
-                </>
+                </div>
             )}
         </div>
     );
@@ -427,7 +334,6 @@ const GuitarFretboard: React.FC = () => {
 
 export default GuitarFretboard;
 
-// TypeScript equivalent of C# Note enum
 export enum Note {
     A = "A",
     ASharp = "ASharp",
@@ -443,7 +349,6 @@ export enum Note {
     GSharp = "GSharp"
 }
 
-// TypeScript equivalent of C# ScaleType enum
 export enum ScaleType {
     Major = "Major",
     Minor = "Minor",

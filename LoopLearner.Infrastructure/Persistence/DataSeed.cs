@@ -1,4 +1,4 @@
-using LoopLearner.Domain.SongAggregate.Entities;
+using LoopLearner.Domain.Common.Entities;
 using LoopLearner.Domain.SongAggregate.ValueObjects;
 using LoopLearner.Domain.UserAggregate;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +21,6 @@ public static class DataSeed
         var ccleopatra = User.CreateNew("Cleopatra", "", "ccleopatra", "cleopatra@example.com", "QueenOfEgypt30BC");
         var aalexander = User.CreateNew("Alexander", "the Great", "aalexander", "alexander@example.com",
             "Conqueror356BC");
-        ;
         var ntesla = User.CreateNew("Nikola", "Tesla", "ntesla", "tesla.nikola@example.com", "ACPowerGenius1856");
         var wgenghis = User.CreateNew("Genghis", "Khan", "wgenghis", "genghis.khan@example.com", "MongolEmpire1162");
 
@@ -366,43 +365,6 @@ public static class DataSeed
 
         modelBuilder.Entity<NotePosition>().HasData(notePositions);
     }
-
-
-    public static async Task SeedStandardTuningOpenChords(LoopLearnerDbContext context)
-{
-    // Fetch Note objects for all open chords
-    var cNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.C && n.Position.StringNumber == 5 && n.Position.FretNumber == 3);
-    var eNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.E && n.Position.StringNumber == 4 && n.Position.FretNumber == 2);
-    var gOpenNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.G && n.Position.StringNumber == 3 && n.Position.FretNumber == 0);
-    var bOpenNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.B && n.Position.StringNumber == 2 && n.Position.FretNumber == 0);
-    var highEOpenNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.E && n.Position.StringNumber == 1 && n.Position.FretNumber == 0);
-
-    var dOpenNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.D && n.Position.StringNumber == 4 && n.Position.FretNumber == 0);
-    var fSharpNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.FSharp && n.Position.StringNumber == 1 && n.Position.FretNumber == 2);
-    var aOpenNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.A && n.Position.StringNumber == 5 && n.Position.FretNumber == 0);
-
-    var fNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.F && n.Position.StringNumber == 1 && n.Position.FretNumber == 1);
-
-    var lowEOpenNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.E && n.Position.StringNumber == 6 && n.Position.FretNumber == 0);
-    var gSharpNote = await context.Notes.FirstOrDefaultAsync(n => n.Note == Note.GSharp && n.Position.StringNumber == 3 && n.Position.FretNumber == 1);
-
-    // Create and seed the open chords with full Note objects
-    var chords = new List<Chord>
-    {
-        Chord.CreateNew(Note.C, ChordType.Major, ChordExtension.None, new List<FretNote> { cNote, eNote, gOpenNote, bOpenNote, highEOpenNote }),
-        Chord.CreateNew(Note.D, ChordType.Major, ChordExtension.None, new List<FretNote> { dOpenNote, fSharpNote, aOpenNote }),
-        Chord.CreateNew(Note.D, ChordType.Minor, ChordExtension.None, new List<FretNote> { dOpenNote, fNote, aOpenNote }),
-        Chord.CreateNew(Note.E, ChordType.Major, ChordExtension.None, new List<FretNote> { lowEOpenNote, gSharpNote, bOpenNote, highEOpenNote }),
-        Chord.CreateNew(Note.E, ChordType.Minor, ChordExtension.None, new List<FretNote> { lowEOpenNote, gOpenNote, bOpenNote, highEOpenNote }),
-        Chord.CreateNew(Note.G, ChordType.Major, ChordExtension.None, new List<FretNote> { lowEOpenNote, dOpenNote, bOpenNote, highEOpenNote }),
-        Chord.CreateNew(Note.A, ChordType.Major, ChordExtension.None, new List<FretNote> { aOpenNote, fSharpNote, highEOpenNote }),
-        Chord.CreateNew(Note.A, ChordType.Minor, ChordExtension.None, new List<FretNote> { aOpenNote, cNote, eNote })
-    };
-
-    await context.Chords.AddRangeAsync(chords);
-    await context.SaveChangesAsync();
-}
-
 }
 
 

@@ -47,7 +47,7 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '/api/songs/notes': {
+            '/api/notes/notes': {
                 target, // Proxy the API requests to the backend server
                 secure: false
             },

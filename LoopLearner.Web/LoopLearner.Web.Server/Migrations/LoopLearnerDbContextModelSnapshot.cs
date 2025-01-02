@@ -160,7 +160,7 @@ namespace LoopLearner.Web.Server.Migrations
 
                     b.HasIndex("LastModifiedByUserId");
 
-                    b.ToTable("Songs");
+                    b.ToTable("Notes");
                 });
 
             modelBuilder.Entity("LoopLearner.Domain.SongAggregate.ValueObjects.NotePosition", b =>

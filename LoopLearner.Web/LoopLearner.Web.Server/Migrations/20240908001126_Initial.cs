@@ -43,7 +43,7 @@ namespace LoopLearner.Web.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Songs",
+                name: "Notes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -85,7 +85,7 @@ namespace LoopLearner.Web.Server.Migrations
                     table.ForeignKey(
                         name: "FK_InstrumentParts_Songs_SongId",
                         column: x => x.SongId,
-                        principalTable: "Songs",
+                        principalTable: "Notes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -222,12 +222,12 @@ namespace LoopLearner.Web.Server.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Songs_CreatedByUserId",
-                table: "Songs",
+                table: "Notes",
                 column: "CreatedByUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Songs_LastModifiedByUserId",
-                table: "Songs",
+                table: "Notes",
                 column: "LastModifiedByUserId");
 
             migrationBuilder.CreateIndex(
@@ -258,7 +258,7 @@ namespace LoopLearner.Web.Server.Migrations
                 name: "InstrumentParts");
 
             migrationBuilder.DropTable(
-                name: "Songs");
+                name: "Notes");
 
             migrationBuilder.DropTable(
                 name: "Users");

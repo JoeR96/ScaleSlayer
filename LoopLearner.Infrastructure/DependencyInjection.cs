@@ -57,15 +57,6 @@ namespace LoopLearner.Infrastructure
 
                     options.Events = new JwtBearerEvents()
                     {
-                        //OnAuthenticationFailed = context =>
-                        //{
-                        //    context.NoResult();
-                        //    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                        //    context.Response.ContentType = "application/json";
-
-                        //    var internalServerProblem = new ProblemDetails() { Status = context.Response.StatusCode, Type = "InternalServerError", Detail = "Authentication could not be completed" };
-                        //    return context.Response.WriteAsJsonAsync(internalServerProblem);
-                        //},
                         OnChallenge = context =>
                         {
                             context.HandleResponse();
@@ -101,11 +92,8 @@ namespace LoopLearner.Infrastructure
 
             services.AddScoped<PublishDomainEventInterceptor>();
             services.AddScoped<AuditableInterceptor>();
-            services.AddScoped<IUserRespository, UserRepository>();
-            services.AddScoped<ISongRepository, SongRepository>();
-            services.AddScoped<IInstrumentPartRepository, InstrumentPartRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();
-            services.AddScoped<IChordRepository, ChordRepository>();
             return services;
         }
 

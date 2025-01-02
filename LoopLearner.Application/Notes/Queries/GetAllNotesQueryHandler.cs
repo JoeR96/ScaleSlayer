@@ -1,8 +1,9 @@
 using CSharpFunctionalExtensions;
 using LoopLearner.Application.Contracts.Persistence;
+using LoopLearner.Application.Notes.Queries;
+using LoopLearner.Domain.Common.Entities;
 using LoopLearner.Domain.Errors;
 using LoopLearner.Domain.Errors.General;
-using LoopLearner.Domain.SongAggregate.Entities;
 
 namespace LoopLearner.Application.Songs.Queries;
 

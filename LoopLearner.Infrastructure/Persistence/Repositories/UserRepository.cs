@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LoopLearner.Infrastructure.Persistence.Repositories;
 
-public class UserRepository : IUserRespository
+public class UserRepository : IUserRepository
 {
     private readonly LoopLearnerDbContext _context;
 

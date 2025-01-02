@@ -1,14 +1,12 @@
+using AutoMapper;
 using LoopLearner.Application.Authentication.Commands.Register;
 using LoopLearner.Application.Authentication.Queries;
 using LoopLearner.Web.Server.Models.Authentication;
-
-namespace LoopLearner.Web.Server.Controllers;
-
-using AutoMapper;
-
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+namespace LoopLearner.Web.Server.Controllers;
 
 [Route("api/auth")]
 [AllowAnonymous]
