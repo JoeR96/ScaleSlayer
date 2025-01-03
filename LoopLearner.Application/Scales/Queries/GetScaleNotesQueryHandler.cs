@@ -89,23 +89,29 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
             {
                 boxes[box.Key] = new List<FretRange> { new FretRange(startFret, endFret) };
             }
+
+            while (startFret > 0)
+            {
+                startFret -= 12;
+                endFret -= 12;
+
+                if (startFret >= 0 && endFret > 0)
+                {
+                    boxes[box.Key].Add(new FretRange(startFret, endFret));
+                }
+            }
+
+            int nextStartFret = rootNote + box.Value.startOffset + 12;
+            int nextEndFret = rootNote + box.Value.endOffset + 12;
+
+            while (nextStartFret < totalFrets)
+            {
+                boxes[box.Key].Add(new FretRange(nextStartFret, nextEndFret));
+                nextStartFret += 12;
+                nextEndFret += 12;
+            }
         }
 
-        //if offset is greater than 0 then see how many boxes are needed
-        // if offset is 9 that means the repeated position 5 is going to have an end offset that is the start of position 1, 
-        // it is going to have a start offset that is end offset - (box 5 end offset - box 5 start offset)
-        // if box 5 end offset - start offset is less than 0 we should set this to 0
-        // we then repeat the process but compare box 5 to box 4 rather than box 5 to box 1
-
-        if (rootNote > 0)
-        {
-            var startOffset = boxes[ScaleBoxPosition.Box5].FirstOrDefault().MaxFret -
-                              boxes[ScaleBoxPosition.Box5].FirstOrDefault().MinFret;
-            
-            boxes[ScaleBoxPosition.Box5].Add(new FretRange(boxes[ScaleBoxPosition.Box1].FirstOrDefault().MinFret -startOffset,
-                boxes[ScaleBoxPosition.Box1].FirstOrDefault().MinFret));
-        }
-        
         return boxes;
     }
 
