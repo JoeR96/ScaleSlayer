@@ -11,9 +11,11 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
 {
     public async Task<Result<Dictionary<ScaleBoxPosition, List<FretNote>>>> Handle(GetScaleNotesQuery request, CancellationToken cancellationToken)
     {
+        int rootNoteOffset = GetRootNoteOffset(request.RootNote);
         var noteNames = GetScaleNoteNames(request.RootNote, request.ScaleType);
         var notes = await noteRepository.GetFretNotesByNamesAsync(noteNames, cancellationToken);
-        var boxNotes = GroupNotesIntoBoxes(notes.ToList(), request.ScaleType);
+        var boxNotes = GroupNotesIntoBoxes(notes.ToList(), request.ScaleType, rootNoteOffset);
+        
         return Result.Success(boxNotes);
     }
 
@@ -21,54 +23,110 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
     {
         var scaleIntervals = new Dictionary<ScaleType, List<int>>
         {
-            { ScaleType.PentatonicMinor, [0, 3, 5, 7, 10] },
-            { ScaleType.Major, [0, 2, 4, 5, 7, 9, 11] },
-            { ScaleType.Minor, [0, 2, 3, 5, 7, 8, 10] }
+            { ScaleType.PentatonicMinor, new List<int> { 0, 3, 5, 7, 10 } },
+            { ScaleType.Major, new List<int> { 0, 2, 4, 5, 7, 9, 11 } },
+            { ScaleType.Minor, new List<int> { 0, 2, 3, 5, 7, 8, 10 } }
         };
 
         if (!scaleIntervals.TryGetValue(scaleType, out var intervals))
             throw new ArgumentException("Invalid scale type", nameof(scaleType));
 
-        var chromaticScale = Enum.GetValues(typeof(Note)).Cast<Note>().ToList();
-        int rootIndex = chromaticScale.IndexOf(rootNote);
-        return intervals.Select(interval => chromaticScale[(rootIndex + interval) % chromaticScale.Count]).ToList();
+        var chromaticScale = new Note[]
+        {
+            Note.A, Note.ASharp, Note.B, Note.C, Note.CSharp, Note.D, Note.DSharp, 
+            Note.E, Note.F, Note.FSharp, Note.G, Note.GSharp
+        };
+
+        int rootIndex = Array.IndexOf(chromaticScale, rootNote);
+
+        var notes = intervals
+            .Select(interval => chromaticScale[(rootIndex + interval) % chromaticScale.Length])
+            .ToList();
+
+        return notes;
     }
 
-    private Dictionary<ScaleBoxPosition, List<FretNote>> GroupNotesIntoBoxes(List<FretNote> notes, ScaleType scaleType)
+
+    private Dictionary<ScaleBoxPosition, List<FretNote>> GroupNotesIntoBoxes(List<FretNote> notes, ScaleType scaleType, int rootNote)
     {
-        var boxFretPositions = ResolveBoxFretPositions(scaleType);
+        var boxFretPositions = ResolveBoxFretPositions(scaleType, rootNote); 
         var boxNotes = new Dictionary<ScaleBoxPosition, List<FretNote>>();
 
         foreach (var box in boxFretPositions)
         {
-            var (minFret, maxFret) = box.Value;
+            var scaleBox = box.Key; 
+            var fretRanges = box.Value; 
 
-            boxNotes[box.Key] = notes
-                .Where(n => n.Position.FretNumber >= minFret && n.Position.FretNumber <= maxFret)
+            boxNotes[scaleBox] = notes
+                .Where(n => fretRanges.Any(range => 
+                    n.Position.FretNumber >= range.MinFret && n.Position.FretNumber <= range.MaxFret))
                 .ToList();
         }
 
         return boxNotes;
     }
 
-    private Dictionary<ScaleBoxPosition, (int MinFret, int MaxFret)> ResolveBoxFretPositions(ScaleType scaleType)
+
+    private Dictionary<ScaleBoxPosition, List<FretRange>> ResolveBoxFretPositions(ScaleType scaleType, int rootNote, int totalFrets = 22)
     {
-        return scaleType == ScaleType.PentatonicMinor
-            ? new Dictionary<ScaleBoxPosition, (int MinFret, int MaxFret)>
+        // Define scale intervals for a minor pentatonic scale, for example
+        var scaleIntervals = new Dictionary<ScaleBoxPosition, (int startOffset, int endOffset)>
+        {
+            [ScaleBoxPosition.Box1] = (0, 3),
+            [ScaleBoxPosition.Box2] = (2, 5),
+            [ScaleBoxPosition.Box3] = (4, 8),
+            [ScaleBoxPosition.Box4] = (7, 10),
+            [ScaleBoxPosition.Box5] = (9, 12)
+        };
+
+        // Calculate the starting fret based on the root note
+        var boxes = new Dictionary<ScaleBoxPosition, List<FretRange>>();
+
+        foreach (var box in scaleIntervals)
+        {
+            int startFret = rootNote + box.Value.startOffset;
+            int endFret = rootNote + box.Value.endOffset;
+
+            // Make sure we don't go beyond the total number of frets available
+            if (startFret < totalFrets && endFret <= totalFrets)
             {
-                [ScaleBoxPosition.Box1] = (0, 3),
-                [ScaleBoxPosition.Box2] = (2, 5),
-                [ScaleBoxPosition.Box3] = (4, 8),
-                [ScaleBoxPosition.Box4] = (7, 10),
-                [ScaleBoxPosition.Box5] = (9, 12)
+                boxes[box.Key] = new List<FretRange> { new FretRange(startFret, endFret) };
             }
-            : new Dictionary<ScaleBoxPosition, (int MinFret, int MaxFret)>
-            {
-                [ScaleBoxPosition.Box1] = (1, 5),
-                [ScaleBoxPosition.Box2] = (4, 8),
-                [ScaleBoxPosition.Box3] = (6, 10),
-                [ScaleBoxPosition.Box4] = (9, 13),
-                [ScaleBoxPosition.Box5] = (11, 15)
-            };
+        }
+
+        return boxes;
     }
+
+
+    public int GetRootNoteOffset(Note rootNote)
+    {
+        var chromaticScale = new Note[]
+        {
+            Note.E, Note.F, Note.FSharp, Note.G, Note.GSharp, Note.A, Note.ASharp, Note.B,
+            Note.C, Note.CSharp, Note.D, Note.DSharp, Note.E
+        };
+
+        int offset = Array.IndexOf(chromaticScale, rootNote);
+    
+        if (offset == -1)
+        {
+            throw new ArgumentException($"Invalid root note: {rootNote}");
+        }
+
+        return offset;
+    }
+}
+
+public class FretRange
+{
+    public int MinFret { get; set; }
+    public int MaxFret { get; set; }
+
+    public FretRange(int minFret, int maxFret)
+    {
+        MinFret = minFret;
+        MaxFret = maxFret;
+    }
+
+    public override string ToString() => $"{MinFret}-{MaxFret}";
 }

@@ -1,65 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import {Note, ScaleType} from "./enums";
 
-// Define types for the notes, positions, chords, and chord notes
-interface NotePosition {
-    stringNumber: number;
-    fretNumber: number;
-}
 
-interface GuitarNote {
-    note: string;
-    position: NotePosition;
-}
-
-interface ScaleBox {
-    [box: string]: GuitarNote[];
-}
-
-interface Chord {
-    rootNote: string;
-    chordType: string;
-    chordExtension: string;
-    notes: GuitarNote[];
-}
-
-// Function to generate colors or styles based on note name
-const getNoteColor = (note: string) => {
-    const colors: { [key: string]: string } = {
-        'C': '#f94144',
-        'CSharp': '#f3722c',
-        'D': '#f8961e',
-        'DSharp': '#f9844a',
-        'E': '#f9c74f',
-        'F': '#90be6d',
-        'FSharp': '#43aa8b',
-        'G': '#4d908e',
-        'GSharp': '#577590',
-        'A': '#277da1',
-        'ASharp': '#2a9d8f',
-        'B': '#264653'
-    };
-    return colors[note] || '#000000'; // Default to black if note name isn't recognized
-};
-
-// Function to format the note name for display (e.g., "FSharp" becomes "F#")
-const formatnote = (note: string) => {
-    if (note.includes('Sharp')) {
-        return note[0] + '#'; // Example: FSharp becomes F#
-    }
-    return note[0]; // Otherwise just return the first letter
-};
-
-// Main GuitarFretboard component
 const GuitarFretboard: React.FC = () => {
     const [notes, setNotes] = useState<GuitarNote[] | undefined>(undefined);
     const [scaleNotes, setScaleNotes] = useState<ScaleBox | undefined>(undefined);
-    const [chords, setChords] = useState<Chord[] | undefined>(undefined);
     const [selectedBoxes, setSelectedBoxes] = useState<string[]>([]);
     const [showScale, setShowScale] = useState<boolean>(false);
     const [selectedRootNote, setSelectedRootNote] = useState<Note>(Note.CSharp);
     const [selectedScaleType, setSelectedScaleType] = useState<ScaleType>(ScaleType.PentatonicMinor);
 
-    // Fetch the notes data
     useEffect(() => {
         const populateNotesData = async () => {
             try {
@@ -94,8 +44,34 @@ const GuitarFretboard: React.FC = () => {
         
         populateNotesData();
         populateScaleData();
+        
     }, [selectedRootNote, selectedScaleType]);
 
+    const getNoteColor = (note: string) => {
+        const colors: { [key: string]: string } = {
+            'C': '#f94144',
+            'CSharp': '#f3722c',
+            'D': '#f8961e',
+            'DSharp': '#f9844a',
+            'E': '#f9c74f',
+            'F': '#90be6d',
+            'FSharp': '#43aa8b',
+            'G': '#4d908e',
+            'GSharp': '#577590',
+            'A': '#277da1',
+            'ASharp': '#2a9d8f',
+            'B': '#264653'
+        };
+        return colors[note] || '#000000'; // Default to black if note name isn't recognized
+    };
+
+    const formatnote = (note: string) => {
+        if (note.includes('Sharp')) {
+            return note[0] + '#';
+        }
+        return note[0];
+    };
+    
     const handleToggle = () => {
         setShowScale(!showScale);
     };
@@ -144,64 +120,6 @@ const GuitarFretboard: React.FC = () => {
         setSelectedScaleType(e.target.value as ScaleType);
     };
     
-    const renderChordFretboard = (chord: Chord) => {
-        const { lowestFret, highestFret } = getFretRange(chord);
-        const fretRange = [...Array(highestFret - lowestFret + 1).keys()].map(f => f + lowestFret);
-        const chordFretboardWidth = 200;
-        const chordFretWidth = chordFretboardWidth / fretRange.length;
-
-        return (
-            <svg key={chord.rootNote + chord.chordType} width={chordFretboardWidth} height="120" xmlns="http://www.w3.org/2000/svg">
-                {strings.map((stringLabel, index) => (
-                    <text
-                        key={index}
-                        x="0"
-                        y={15 + index * 20 + 4}
-                        style={{ fill: 'white', fontWeight: 'bold' }}  // Use inline style
-                        fontSize="10"
-                        textAnchor="middle"
-                    >
-                        {stringLabel}
-                    </text>
-                ))}
-
-                {strings.map((string, index) => (
-                    <line
-                        key={index}
-                        x1="30"
-                        y1={15 + index * 20}
-                        x2={chordFretboardWidth}
-                        y2={15 + index * 20}
-                        stroke="black"
-                        strokeWidth="2"
-                    />
-                ))}
-
-                {fretRange.map((fret, index) => (
-                    <g key={index}>
-                        <line
-                            x1={index * chordFretWidth}
-                            y1="0"
-                            x2={index * chordFretWidth}
-                            y2="120"
-                            stroke="black"
-                            strokeWidth="1"
-                        />
-                        <text
-                            x={index * chordFretWidth + chordFretWidth / 2}
-                            y="12"
-                            style={{ fill: 'white', fontWeight: 'bold' }}  // Use inline style
-                            fontSize="10"
-                            textAnchor="middle"
-                        >
-                            {fret}
-                        </text>
-                    </g>
-                ))}
-            </svg>
-        );
-    };
-
     return (
         <div id="app">
             <h2>Guitar Fretboard</h2>
@@ -334,32 +252,4 @@ const GuitarFretboard: React.FC = () => {
 
 export default GuitarFretboard;
 
-export enum Note {
-    A = "A",
-    ASharp = "ASharp",
-    B = "B",
-    C = "C",
-    CSharp = "CSharp",
-    D = "D",
-    DSharp = "DSharp",
-    E = "E",
-    F = "F",
-    FSharp = "FSharp",
-    G = "G",
-    GSharp = "GSharp"
-}
 
-export enum ScaleType {
-    Major = "Major",
-    Minor = "Minor",
-    HarmonicMinor = "HarmonicMinor",
-    MelodicMinor = "MelodicMinor",
-    PentatonicMajor = "PentatonicMajor",
-    PentatonicMinor = "PentatonicMinor",
-    Blues = "Blues",
-    Dorian = "Dorian",
-    Phrygian = "Phrygian",
-    Lydian = "Lydian",
-    Mixolydian = "Mixolydian",
-    Locrian = "Locrian"
-}
