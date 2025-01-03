@@ -69,7 +69,6 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
 
     private Dictionary<ScaleBoxPosition, List<FretRange>> ResolveBoxFretPositions(ScaleType scaleType, int rootNote, int totalFrets = 22)
     {
-        // Define scale intervals for a minor pentatonic scale, for example
         var scaleIntervals = new Dictionary<ScaleBoxPosition, (int startOffset, int endOffset)>
         {
             [ScaleBoxPosition.Box1] = (0, 3),
@@ -79,7 +78,6 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
             [ScaleBoxPosition.Box5] = (9, 12)
         };
 
-        // Calculate the starting fret based on the root note
         var boxes = new Dictionary<ScaleBoxPosition, List<FretRange>>();
 
         foreach (var box in scaleIntervals)
@@ -87,13 +85,27 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
             int startFret = rootNote + box.Value.startOffset;
             int endFret = rootNote + box.Value.endOffset;
 
-            // Make sure we don't go beyond the total number of frets available
             if (startFret < totalFrets && endFret <= totalFrets)
             {
                 boxes[box.Key] = new List<FretRange> { new FretRange(startFret, endFret) };
             }
         }
 
+        //if offset is greater than 0 then see how many boxes are needed
+        // if offset is 9 that means the repeated position 5 is going to have an end offset that is the start of position 1, 
+        // it is going to have a start offset that is end offset - (box 5 end offset - box 5 start offset)
+        // if box 5 end offset - start offset is less than 0 we should set this to 0
+        // we then repeat the process but compare box 5 to box 4 rather than box 5 to box 1
+
+        if (rootNote > 0)
+        {
+            var startOffset = boxes[ScaleBoxPosition.Box5].FirstOrDefault().MaxFret -
+                              boxes[ScaleBoxPosition.Box5].FirstOrDefault().MinFret;
+            
+            boxes[ScaleBoxPosition.Box5].Add(new FretRange(boxes[ScaleBoxPosition.Box1].FirstOrDefault().MinFret -startOffset,
+                boxes[ScaleBoxPosition.Box1].FirstOrDefault().MinFret));
+        }
+        
         return boxes;
     }
 
