@@ -26,7 +26,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\LoopLearner.Web\ScaleSlayer.Web.Server\ScaleSlayer.Web.Server.csproj" />
+      <ProjectReference Include="..\..\ScaleSlayer.Application\ScaleSlayer.Application.csproj" />
+      <ProjectReference Include="..\..\ScaleSlayer.Domain\ScaleSlayer.Domain.csproj" />
+      <ProjectReference Include="..\..\ScaleSlayer.Web\ScaleSlayer.Web.Server\ScaleSlayer.Web.Server.csproj" />
     </ItemGroup>
 
 </Project>
