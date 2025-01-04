@@ -126,12 +126,12 @@ const GuitarFretboard: React.FC = () => {
                 </select>
             </div>
 
-            <svg width={fretboardWidth} height="200" viewBox={`0 0 ${fretboardWidth} 200`}
+            <svg width={fretboardWidth} height="200" viewBox={`-40 0 ${fretboardWidth + 40} 200`}
                  xmlns="http://www.w3.org/2000/svg">
                 {strings.map((stringLabel, index) => (
                     <text
                         key={index}
-                        x="0"
+                        x="-15"
                         y={30 + index * 25 + 4}
                         style={{fill: 'white', fontWeight: 'bold'}}
                         fontSize="12"
