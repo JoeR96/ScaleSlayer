@@ -60,7 +60,7 @@ const GuitarFretboard: React.FC = () => {
         }
         return note[0];
     };
-    
+
     const handleToggle = () => {
         setShowScale(!showScale);
     };
@@ -75,7 +75,8 @@ const GuitarFretboard: React.FC = () => {
 
     const strings = ['E', 'A', 'D', 'G', 'B', 'E'].reverse();
     const totalFrets = 23;
-    const fretboardWidth = 800;
+    const fretboardWidth = 1600; // Twice the original width
+    const fretboardHeight = 400; // Twice the original height
 
     if (!notes || !scaleNotes) {
         return <p>Loading notes and chords...</p>;
@@ -92,7 +93,7 @@ const GuitarFretboard: React.FC = () => {
     const handleScaleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedScaleType(e.target.value as ScaleType);
     };
-    
+
     return (
         <div id="app">
             <h2>Guitar Fretboard</h2>
@@ -126,15 +127,15 @@ const GuitarFretboard: React.FC = () => {
                 </select>
             </div>
 
-            <svg width={fretboardWidth} height="200" viewBox={`-40 0 ${fretboardWidth + 40} 200`}
+            <svg width={fretboardWidth} height={fretboardHeight} viewBox={`-40 0 ${fretboardWidth + 40} ${fretboardHeight}`}
                  xmlns="http://www.w3.org/2000/svg">
                 {strings.map((stringLabel, index) => (
                     <text
                         key={index}
-                        x="-15"
-                        y={30 + index * 25 + 4}
+                        x="-30"
+                        y={45 + index * 50 + 4} // Adjusted for height change
                         style={{fill: 'white', fontWeight: 'bold'}}
-                        fontSize="12"
+                        fontSize="24" // Larger text for better visibility
                         textAnchor="middle"
                     >
                         {stringLabel}
@@ -144,12 +145,12 @@ const GuitarFretboard: React.FC = () => {
                 {strings.map((_, index) => (
                     <line
                         key={index}
-                        x1="30"
-                        y1={30 + index * 25}
+                        x1="60"
+                        y1={45 + index * 50}
                         x2={fretboardWidth}
-                        y2={30 + index * 25}
+                        y2={45 + index * 50}
                         stroke="black"
-                        strokeWidth="2"
+                        strokeWidth="4" // Thicker lines for better visibility
                     />
                 ))}
 
@@ -159,15 +160,15 @@ const GuitarFretboard: React.FC = () => {
                             x1={index * (fretboardWidth / totalFrets)}
                             y1="0"
                             x2={index * (fretboardWidth / totalFrets)}
-                            y2="200"
+                            y2={fretboardHeight}
                             stroke="black"
-                            strokeWidth="1"
+                            strokeWidth="2"
                         />
                         <text
                             x={index * (fretboardWidth / totalFrets) + (fretboardWidth / totalFrets) / 2}
-                            y="12"
-                            style={{fill: 'white', fontWeight: 'bold'}}  // Use inline style
-                            fontSize="10"
+                            y="24" // Adjusted for height change
+                            style={{fill: 'white', fontWeight: 'bold'}}
+                            fontSize="20" // Larger text for better visibility
                             textAnchor="middle"
                         >
                             {fret}
@@ -175,25 +176,24 @@ const GuitarFretboard: React.FC = () => {
                     </g>
                 ))}
                 {notesToDisplay.notes.map((note, index) => {
-                    //console.log(selectedBoxes);
                     return (
                         <g key={index}>
                             <circle
                                 cx={note.position.fretNumber * (fretboardWidth / totalFrets) + (fretboardWidth / totalFrets) / 2}
-                                cy={30 + (note.position.stringNumber - 1) * 25}
-                                r="10"
+                                cy={45 + (note.position.stringNumber - 1) * 50}
+                                r="20" // Larger circles for better visibility
                                 fill={getNoteColor(note.note)}
                                 stroke="black"
-                                strokeWidth="2"
+                                strokeWidth="4" // Thicker stroke for better visibility
                             >
                                 <title>{note.note}</title>
                             </circle>
 
                             <text
                                 x={note.position.fretNumber * (fretboardWidth / totalFrets) + (fretboardWidth / totalFrets) / 2}
-                                y={30 + (note.position.stringNumber - 1) * 25 + 4}
+                                y={45 + (note.position.stringNumber - 1) * 50 + 6} // Adjusted for height change
                                 fill="white"
-                                fontSize="10"
+                                fontSize="16" // Larger text for better visibility
                                 textAnchor="middle"
                                 style={{userSelect: 'none'}}
                             >
@@ -227,5 +227,3 @@ const GuitarFretboard: React.FC = () => {
 };
 
 export default GuitarFretboard;
-
-
