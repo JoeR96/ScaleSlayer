@@ -1,4 +1,4 @@
-ScaleSlayer is a DotNet Web Application with a React Frontend. It's purpose is to display diffrent musical scales in all keys for Guitar.
+ScaleSlayer is a .Net Web Application with a React Frontend. It's purpose is to display diffrent musical scales in all keys for Guitar.
 It visualises the guitar fretboard and maps the appropriate notes to different scale boxes.
 
 This project follows a Domain Driven Design approach and serves as a repository to practice DDD and implement modern design patterns where appropriate.
