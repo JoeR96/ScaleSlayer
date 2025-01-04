@@ -1,0 +1,55 @@
+# .NET
+## User-specific files
+.idea/
+.vs/
+.vscode/
+
+## ASP.NET Core / .NET build directories
+bin/
+obj/
+out/
+
+## .NET Core user secrets
+secrets.json
+
+## ASP.NET Core config files
+appsettings.Development.json
+appsettings.Production.json
+
+## Visual Studio for Mac
+.vscode/
+
+# React
+## Node modules
+node_modules/
+
+## npm logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## Build directories
+build/
+dist/
+.eslintcache
+
+## IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+## Misc
+*.env
+*.local
+*.log
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Linux
+*~
