@@ -26,44 +26,62 @@ public class Scale : AggregateRoot<ScaleId>
 
     public List<Note> GetScaleNoteNames()
     {
+        var intervals = GetScaleIntervals(ScaleType);
+        var chromaticScale = GetChromaticScale();
+
+        int rootIndex = GetRootIndex(chromaticScale);
+
+        return intervals
+            .Select(interval => chromaticScale[(rootIndex + interval) % chromaticScale.Length])
+            .ToList();
+    }
+
+    private List<int> GetScaleIntervals(ScaleType scaleType)
+    {
         var scaleIntervals = new Dictionary<ScaleType, List<int>>
         {
-            { ScaleType.PentatonicMinor, [0, 3, 5, 7, 10] },
-            { ScaleType.Major, [0, 2, 4, 5, 7, 9, 11] },
-            { ScaleType.Minor, [0, 2, 3, 5, 7, 8, 10] }
+            { ScaleType.PentatonicMinor, new List<int> { 0, 3, 5, 7, 10 } },
+            { ScaleType.Major, new List<int> { 0, 2, 4, 5, 7, 9, 11 } },
+            { ScaleType.Minor, new List<int> { 0, 2, 3, 5, 7, 8, 10 } }
         };
 
-        if (!scaleIntervals.TryGetValue(ScaleType, out var intervals))
+        if (!scaleIntervals.TryGetValue(scaleType, out var intervals))
             throw new DomainException("Invalid scale type");
 
-        var chromaticScale = new[]
+        return intervals;
+    }
+
+    private Note[] GetChromaticScale()
+    {
+        return new[]
         {
             Note.A, Note.ASharp, Note.B, Note.C, Note.CSharp, Note.D, Note.DSharp, 
             Note.E, Note.F, Note.FSharp, Note.G, Note.GSharp
         };
+    }
 
-        int rootIndex = Array.IndexOf(chromaticScale, RootNote);
-
-        var notes = intervals
-            .Select(interval => chromaticScale[(rootIndex + interval) % chromaticScale.Length])
-            .ToList();
-
-        return notes;
+    private int GetRootIndex(Note[] chromaticScale)
+    {
+        return Array.IndexOf(chromaticScale, RootNote);
     }
     
     public Dictionary<ScaleBoxPosition, List<FretNote>> GroupNotesIntoBoxes(List<FretNote> notes)
     {
         var boxFretPositions = ResolveBoxFretPositions(); 
+        return GroupNotesByBox(notes, boxFretPositions);
+    }
+
+    private Dictionary<ScaleBoxPosition, List<FretNote>> GroupNotesByBox(List<FretNote> notes, Dictionary<ScaleBoxPosition, List<FretRange>> boxFretPositions)
+    {
         var boxNotes = new Dictionary<ScaleBoxPosition, List<FretNote>>();
 
         foreach (var box in boxFretPositions)
         {
-            var scaleBox = box.Key; 
-            var fretRanges = box.Value; 
+            var scaleBox = box.Key;
+            var fretRanges = box.Value;
 
             boxNotes[scaleBox] = notes
-                .Where(n => fretRanges.Any(range => 
-                    n.NotePosition.FretNumber >= range.MinFret && n.NotePosition.FretNumber <= range.MaxFret))
+                .Where(n => fretRanges.Any(range => n.NotePosition.FretNumber >= range.MinFret && n.NotePosition.FretNumber <= range.MaxFret))
                 .ToList();
         }
 
@@ -72,7 +90,22 @@ public class Scale : AggregateRoot<ScaleId>
 
     private Dictionary<ScaleBoxPosition, List<FretRange>> ResolveBoxFretPositions(int totalFrets = 22)
     {
-        var scaleIntervals = new Dictionary<ScaleBoxPosition, (int startOffset, int endOffset)>
+        var scaleIntervals = GetScaleBoxIntervals();
+        var rooteNoteOffset = GetRootNoteOffset();
+
+        var boxes = new Dictionary<ScaleBoxPosition, List<FretRange>>();
+
+        foreach (var box in scaleIntervals)
+        {
+            boxes[box.Key] = ResolveFretRangesForBox(box.Value, rooteNoteOffset, totalFrets);
+        }
+
+        return boxes;
+    }
+
+    private Dictionary<ScaleBoxPosition, (int startOffset, int endOffset)> GetScaleBoxIntervals()
+    {
+        return new Dictionary<ScaleBoxPosition, (int startOffset, int endOffset)>
         {
             [ScaleBoxPosition.Box1] = (0, 3),
             [ScaleBoxPosition.Box2] = (2, 5),
@@ -80,65 +113,66 @@ public class Scale : AggregateRoot<ScaleId>
             [ScaleBoxPosition.Box4] = (7, 10),
             [ScaleBoxPosition.Box5] = (9, 12)
         };
+    }
 
-        var boxes = new Dictionary<ScaleBoxPosition, List<FretRange>>();
+    private List<FretRange> ResolveFretRangesForBox((int startOffset, int endOffset) boxInterval, int rootNoteOffset, int totalFrets)
+    {
+        int startFret = rootNoteOffset + boxInterval.startOffset;
+        int endFret = rootNoteOffset + boxInterval.endOffset;
 
-        var rooteNoteOffset = GetRootNoteOffset();
-        foreach (var box in scaleIntervals)
+        var fretRanges = new List<FretRange>();
+
+        if (startFret < totalFrets && endFret <= totalFrets)
         {
-            int startFret = rooteNoteOffset + box.Value.startOffset;
-            int endFret = rooteNoteOffset + box.Value.endOffset;
+            fretRanges.Add(new FretRange(startFret, endFret));
+        }
+        else
+        {
+            fretRanges.Add(new FretRange(startFret, totalFrets));
+        }
 
-            if (startFret < totalFrets && endFret <= totalFrets)
+        fretRanges.AddRange(HandleFretWrapAround(startFret, endFret, totalFrets));
+
+        return fretRanges;
+    }
+
+    private List<FretRange> HandleFretWrapAround(int startFret, int endFret, int totalFrets)
+    {
+        var fretRanges = new List<FretRange>();
+
+        while (startFret > 0)
+        {
+            startFret -= 12;
+            endFret -= 12;
+
+            if (startFret >= 0 && endFret > 0)
             {
-                boxes[box.Key] = [new FretRange(startFret, endFret)];
-            }
-            else
-            {
-                boxes[box.Key] = [new FretRange(startFret, 22)];
-
-            }
-
-            while (startFret > 0)
-            {
-                startFret -= 12;
-                endFret -= 12;
-
-                if (startFret >= 0 && endFret > 0)
-                {
-                    boxes[box.Key].Add(new FretRange(startFret, endFret));
-                }
-            }
-
-            int nextStartFret = rooteNoteOffset + box.Value.startOffset + 12;
-            int nextEndFret = rooteNoteOffset + box.Value.endOffset + 12;
-
-            while (nextStartFret < totalFrets)
-            {
-                boxes[box.Key].Add(new FretRange(nextStartFret, nextEndFret));
-                nextStartFret += 12;
-                nextEndFret += 12;
+                fretRanges.Add(new FretRange(startFret, endFret));
             }
         }
 
-        return boxes;
+        int nextStartFret = startFret + 12;
+        int nextEndFret = endFret + 12;
+
+        while (nextStartFret < totalFrets)
+        {
+            fretRanges.Add(new FretRange(nextStartFret, nextEndFret));
+            nextStartFret += 12;
+            nextEndFret += 12;
+        }
+
+        return fretRanges;
     }
 
     private int GetRootNoteOffset()
     {
-        var chromaticScale = new[]
-        {
-            Note.E, Note.F, Note.FSharp, Note.G, Note.GSharp, Note.A, Note.ASharp, Note.B,
-            Note.C, Note.CSharp, Note.D, Note.DSharp, Note.E
-        };
-
-        int offset = Array.IndexOf(chromaticScale, RootNote);
-    
-        if (offset == -1)
-        {
-            throw new DomainException($"Invalid root note: {RootNote}");
-        }
-
-        return offset;
+        var chromaticScale = GetChromaticScaleForOffset();
+        return Array.IndexOf(chromaticScale, RootNote);
     }
+
+    private Note[] GetChromaticScaleForOffset() =>
+    [
+        Note.E, Note.F, Note.FSharp, Note.G, Note.GSharp, Note.A, Note.ASharp, Note.B,
+        Note.C, Note.CSharp, Note.D, Note.DSharp, Note.E
+    ];
 }
