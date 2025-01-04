@@ -1,7 +1,7 @@
 using FluentAssertions;
+using ScaleSlayer.Application.Scales.Responses;
 using ScaleSlayer.Domain.ScaleAggregate.ValueObjects;
 using ScaleSlayer.IntegrationTests.Extensions;
-using ScaleSlayer.Web.Server.Dto;
 
 namespace ScaleSlayer.IntegrationTests;
 [TestFixture]

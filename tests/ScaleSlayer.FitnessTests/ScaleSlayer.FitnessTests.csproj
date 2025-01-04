@@ -22,8 +22,4 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\LoopLearner.Web\ScaleSlayer.Web.Server\ScaleSlayer.Web.Server.csproj" />
-    </ItemGroup>
-
 </Project>
