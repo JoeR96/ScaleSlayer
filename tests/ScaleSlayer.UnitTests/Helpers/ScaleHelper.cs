@@ -1,5 +1,5 @@
-using LoopLearner.Domain.ScaleAggregate;
-using LoopLearner.Domain.ScaleAggregate.ValueObjects;
+using ScaleSlayer.Domain.ScaleAggregate;
+using ScaleSlayer.Domain.ScaleAggregate.ValueObjects;
 
 namespace ScaleSlayer.UnitTests.Helpers;
 

@@ -13,31 +13,31 @@ public class ArchitecturalLayerTests
             .For(Types.InCurrentDomain)
             .Add(t => t
                 .That()
-                .ResideInNamespace("LoopLearner.Domain")
+                .ResideInNamespace("ScaleSlayer.Application.Domain")
                 .ShouldNot()
-                .HaveDependencyOn("LoopLearner.Web.Server")
+                .HaveDependencyOn("ScaleSlayer.Web.Server")
                 .Or()
-                .HaveDependencyOn("LoopLearner.Infrastructure")
+                .HaveDependencyOn("ScaleSlayer.Application.Infrastructure")
                 .Or()
-                .HaveDependencyOn("LoopLearner.Application"),
+                .HaveDependencyOn("ScaleSlayer.Application"),
                 "Domain layer must not depend on presentation, infrastructure or application.",
                 "Domain types should not depend on presentation, infrastructure or application.")
             
             .Add(t => t
                 .That()
-                .ResideInNamespace("LoopLearner.Application")
+                .ResideInNamespace("ScaleSlayer.Application")
                 .ShouldNot()
-                .HaveDependencyOn("LoopLearner.Web.Server")
+                .HaveDependencyOn("ScaleSlayer.Web.Server")
                 .Or()
-                .HaveDependencyOn("LoopLearner.Infrastructure"),
+                .HaveDependencyOn("ScaleSlayer.Application.Infrastructure"),
                 "Application layer must not depend on presentation, infrastructure layer.",
                 "Application types should not depend on presentation, infrastructure.")
             
             .Add(t => t
                 .That()
-                .ResideInNamespace("LoopLearner.Infrastructure")
+                .ResideInNamespace("ScaleSlayer.Application.Infrastructure")
                 .ShouldNot()
-                .HaveDependencyOn("LoopLearner.Web.Server"),
+                .HaveDependencyOn("ScaleSlayer.Web.Server"),
                 "Infrastructure layer must not depend on presentation layer.",
                 "Infrastructure types should not depend on presentation.");
 

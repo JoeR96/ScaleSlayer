@@ -1,7 +1,7 @@
 using FluentAssertions;
-using LoopLearner.Domain.ScaleAggregate.ValueObjects;
-using LoopLearner.Web.Server.Dto;
+using ScaleSlayer.Domain.ScaleAggregate.ValueObjects;
 using ScaleSlayer.IntegrationTests.Extensions;
+using ScaleSlayer.Web.Server.Dto;
 
 namespace ScaleSlayer.IntegrationTests;
 [TestFixture]
