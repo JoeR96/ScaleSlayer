@@ -1,6 +1,6 @@
 using LoopLearner.Domain.Common.Interfaces;
 
-namespace LoopLearner.Domain.UserAggregate.ValueObjects;
+namespace LoopLearner.Domain.ScaleAggregate.ValueObjects;
 
 public record NoteId : IValueObject
 {

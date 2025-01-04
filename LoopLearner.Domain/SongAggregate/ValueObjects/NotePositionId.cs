@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LoopLearner.Domain.Common.Interfaces;
 
 namespace LoopLearner.Domain.UserAggregate.ValueObjects;
@@ -5,6 +6,8 @@ namespace LoopLearner.Domain.UserAggregate.ValueObjects;
 public record NotePositionId : IValueObject
 {
     public Guid Value { get; private set; }
+    
+    [ExcludeFromCodeCoverage(Justification = "Used for EF Core")]
     private NotePositionId() { } 
     private NotePositionId(Guid value)
     {

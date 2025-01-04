@@ -3,7 +3,6 @@ using LoopLearner.Application.Contracts.Persistence;
 using LoopLearner.Application.Scales.Responses;
 using LoopLearner.Domain.Common.Entities;
 using LoopLearner.Domain.ScaleAggregate.ValueObjects;
-using LoopLearner.Domain.SongAggregate.ValueObjects;
 
 namespace LoopLearner.Application.Scales.Queries;
 
@@ -62,7 +61,7 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
 
             boxNotes[scaleBox] = notes
                 .Where(n => fretRanges.Any(range => 
-                    n.Position.FretNumber >= range.MinFret && n.Position.FretNumber <= range.MaxFret))
+                    n.NotePosition.FretNumber >= range.MinFret && n.NotePosition.FretNumber <= range.MaxFret))
                 .ToList();
         }
 
@@ -150,7 +149,7 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
         {
             var mappedFretNotes = scaleNote.Value.Select(fretNote => new FretNoteDto(
                 fretNote.Note, 
-                new NotePositionDto(fretNote.Position.StringNumber, fretNote.Position.FretNumber)
+                new NotePositionDto(fretNote.NotePosition.StringNumber, fretNote.NotePosition.FretNumber)
             )).ToList();
 
             mappedScaleNotes.Add(scaleNote.Key, mappedFretNotes);

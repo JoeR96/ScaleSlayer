@@ -1,8 +1,6 @@
 using LoopLearner.Application.Scales.Queries;
 using LoopLearner.Application.Scales.Responses;
-using LoopLearner.Domain.Common.Entities;
 using LoopLearner.Domain.ScaleAggregate.ValueObjects;
-using LoopLearner.Domain.SongAggregate.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

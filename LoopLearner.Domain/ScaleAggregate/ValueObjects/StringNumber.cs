@@ -1,4 +1,4 @@
-namespace LoopLearner.Domain.SongAggregate.ValueObjects;
+namespace LoopLearner.Domain.ScaleAggregate.ValueObjects;
 
 public enum StringNumber
 {

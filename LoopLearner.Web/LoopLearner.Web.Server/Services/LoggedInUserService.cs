@@ -10,7 +10,7 @@ public class LoggedInUserService(IHttpContextAccessor httpContextAccessor) : ILo
     {
         get
         {
-            var userId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null)
                 return null;
             return UserId.Create(new Guid(userId));

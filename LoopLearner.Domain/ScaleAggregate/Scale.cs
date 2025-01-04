@@ -1,7 +1,6 @@
 using LoopLearner.Domain.Common;
 using LoopLearner.Domain.Common.Entities;
 using LoopLearner.Domain.ScaleAggregate.ValueObjects;
-using LoopLearner.Domain.SongAggregate.ValueObjects;
 
 namespace LoopLearner.Domain.ScaleAggregate;
 

@@ -1,5 +1,5 @@
 using LoopLearner.Domain.Common.Entities;
-using LoopLearner.Domain.SongAggregate.ValueObjects;
+using LoopLearner.Domain.ScaleAggregate.ValueObjects;
 using LoopLearner.Domain.UserAggregate;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

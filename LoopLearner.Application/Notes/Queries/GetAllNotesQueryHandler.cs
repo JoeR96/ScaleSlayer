@@ -13,7 +13,7 @@ public class GetAllNotesQueryHandler(INoteRepository noteRepository)
     {
         var fretNotes = await _noteRepository.GetAllNotesAsync(cancellationToken);
 
-        var fretNoteDtos = fretNotes.Select(note => new FretNoteDto(note.Note, new NotePositionDto(note.Position.StringNumber, note.Position.FretNumber)));
+        var fretNoteDtos = fretNotes.Select(note => new FretNoteDto(note.Note, new NotePositionDto(note.NotePosition.StringNumber, note.NotePosition.FretNumber)));
 
         var response = new GetAllNotesResponse(fretNoteDtos);
         

@@ -1,6 +1,6 @@
 using LoopLearner.Application.Contracts.Persistence;
 using LoopLearner.Domain.Common.Entities;
-using LoopLearner.Domain.SongAggregate.ValueObjects;
+using LoopLearner.Domain.ScaleAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace LoopLearner.Infrastructure.Persistence.Repositories;
@@ -11,14 +11,14 @@ public class NoteRepository(LoopLearnerDbContext context) : INoteRepository
 
     public async Task<IEnumerable<FretNote>> GetAllNotesAsync(CancellationToken cancellationToken)
     {
-        return await _context.Notes.Include(n => n.Position).ToListAsync(cancellationToken);
+        return await _context.Notes.Include(n => n.NotePosition).ToListAsync(cancellationToken);
     }
     
     public async Task<IEnumerable<FretNote>> GetFretNotesByNamesAsync(IEnumerable<Note> noteNames, CancellationToken cancellationToken)
     {
         return await _context.Notes
             .Where(n => noteNames.Contains(n.Note))
-            .Include(n => n.Position)
+            .Include(n => n.NotePosition)
             .ToListAsync(cancellationToken);
     }
 }

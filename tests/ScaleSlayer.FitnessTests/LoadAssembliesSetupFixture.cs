@@ -1,8 +1,4 @@
-using System.Net.Mime;
 using System.Reflection;
-using LoopLearner.Application.Notes.Queries;
-using LoopLearner.Domain.ScaleAggregate;
-using LoopLearner.Infrastructure.Persistence;
 
 namespace ScaleSlayer.FitnessTests;
 
@@ -26,9 +22,4 @@ public class LoadAssembliesSetupFixture
             }
         }
     }
-
-    private Type PresentationType = typeof(Program);
-    private Type InfrastructureType = typeof(LoopLearnerDbContext);
-    private Type ApplicationType = typeof(GetAllNotesQuery);
-    private Type DomainType = typeof(Scale);
 }

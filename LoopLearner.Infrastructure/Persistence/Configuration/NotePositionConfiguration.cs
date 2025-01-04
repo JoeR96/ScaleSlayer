@@ -1,4 +1,4 @@
-using LoopLearner.Domain.SongAggregate.ValueObjects;
+using LoopLearner.Domain.Common.Entities;
 using LoopLearner.Domain.UserAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

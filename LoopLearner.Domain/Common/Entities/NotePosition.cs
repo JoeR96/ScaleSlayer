@@ -1,14 +1,15 @@
-using LoopLearner.Domain.Common;
+using System.Diagnostics.CodeAnalysis;
 using LoopLearner.Domain.UserAggregate.ValueObjects;
 
-namespace LoopLearner.Domain.SongAggregate.ValueObjects;
+namespace LoopLearner.Domain.Common.Entities;
 
 public class NotePosition : Entity<NotePositionId>
 {
     public int StringNumber { get; private set; }
     public int FretNumber { get; private set; }
-
-    private NotePosition() { } // For ORM
+    
+    [ExcludeFromCodeCoverage(Justification = "Used for EF Core")]
+    private NotePosition() { }
 
     private NotePosition(NotePositionId id, int stringNumber, int fretNumber)
         : base(id)

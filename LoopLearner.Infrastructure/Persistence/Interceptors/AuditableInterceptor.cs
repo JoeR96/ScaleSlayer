@@ -41,8 +41,6 @@ public class AuditableInterceptor : SaveChangesInterceptor
                     entry.Entity.LastModifiedOn = _dateTimeProvider.Now;
                     entry.Entity.LastModifiedByUserId = _loggedInUserService.UserId;
                     break;
-                default:
-                    break;
             }
         }
     }

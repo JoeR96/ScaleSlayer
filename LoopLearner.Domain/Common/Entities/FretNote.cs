@@ -1,30 +1,24 @@
-using LoopLearner.Domain.SongAggregate.ValueObjects;
-using LoopLearner.Domain.UserAggregate.ValueObjects;
+using System.Diagnostics.CodeAnalysis;
+using LoopLearner.Domain.ScaleAggregate.ValueObjects;
 
 namespace LoopLearner.Domain.Common.Entities;
 
 public class FretNote : Entity<NoteId>
 {
     public Note Note { get; private set; }
-    public NotePosition Position { get; private set; }
+    public NotePosition NotePosition { get; private set; }
 
+    [ExcludeFromCodeCoverage(Justification = "Used for EF Core")]
     private FretNote() { } 
 
-    private FretNote(NoteId id, Note note, NotePosition position) 
+    private FretNote(NoteId id, Note note, NotePosition notePosition) 
         : base(id)
     {
         Note = note;
-        Position = position;
+        NotePosition = notePosition;
     }
-
-    public static FretNote Create(NoteId id, Note name, NotePosition position)
-        => new(id, name, position);
 
     public static FretNote CreateNew(Note name, NotePosition position) 
         => new(NoteId.CreateNew(), name, position);
 
-    public void UpdatePosition(NotePosition newPosition)
-    {
-        Position = newPosition;
-    }
 }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LoopLearner.Domain.Common.Interfaces;
 
 namespace LoopLearner.Domain.Common;
@@ -19,6 +20,8 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents wh
     {
         Id = id;
     }
+    
+    [ExcludeFromCodeCoverage(Justification = "Used for EF Core")]
     protected Entity() { }
     public override bool Equals(object? obj)
     {

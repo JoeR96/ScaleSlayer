@@ -1,6 +1,5 @@
 using LoopLearner.Application.Notes.Queries;
 using LoopLearner.Application.Scales.Responses;
-using LoopLearner.Domain.Common.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

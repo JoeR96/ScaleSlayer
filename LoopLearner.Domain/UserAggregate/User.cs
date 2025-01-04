@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LoopLearner.Domain.Common;
 using LoopLearner.Domain.UserAggregate.ValueObjects;
 
@@ -5,12 +6,14 @@ namespace LoopLearner.Domain.UserAggregate;
 
 public class User : AggregateRoot<UserId>
 {
-    public UserId Id { get; private set; }
+    public new UserId Id { get; private set; }
     public string UserName { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
+    
+    [ExcludeFromCodeCoverage(Justification = "Used for EF Core")]
     private User() { } 
     private User(UserId id, string firstName, string lastName, string userName, string email, string password)
     {

@@ -1,5 +1,5 @@
 using LoopLearner.Domain.Common.Entities;
-using LoopLearner.Domain.SongAggregate.ValueObjects;
+using LoopLearner.Domain.ScaleAggregate.ValueObjects;
 
 namespace LoopLearner.Application.Contracts.Persistence;
 
