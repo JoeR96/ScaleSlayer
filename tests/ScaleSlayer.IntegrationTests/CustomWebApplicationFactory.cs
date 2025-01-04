@@ -34,15 +34,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         using  var scope = Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ScaleSlayerDbContext>();
         await dbContext.Database.MigrateAsync();
-        try
-        {
-            await DataSeed.SeedNotes(dbContext);
+        await DataSeed.SeedNotes(dbContext);
 
-        }
-        catch (Exception e)
-        {
-            throw new Exception("Failed to seed notes", e);
-        }
     }
     
     public new async Task DisposeAsync() => await _postgresContainer.DisposeAsync();
