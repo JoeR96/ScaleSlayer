@@ -8,6 +8,7 @@
 bin/
 obj/
 out/
+debug/
 
 ## .NET Core user secrets
 secrets.json
