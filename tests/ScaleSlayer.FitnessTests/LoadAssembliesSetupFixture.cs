@@ -14,7 +14,7 @@ public class LoadAssembliesSetupFixture
     private static void LoadAllReferencedAssemblies(Assembly assembly)
     {
         foreach (var assemblyName in assembly.GetReferencedAssemblies()
-                     .Where(n => n.FullName.StartsWith("LoopLearner")))
+                     .Where(n => n.FullName.StartsWith("ScaleSlayer")))
         {
             if (AppDomain.CurrentDomain.GetAssemblies().All(a => a.FullName != assemblyName.FullName))
             {
