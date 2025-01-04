@@ -9,7 +9,8 @@ bin/
 obj/
 out/
 debug/
-
+scaleslayer.web.client/node_modules/
+ScaleSlayer.Application/bin/Debug/net8.0/
 ## .NET Core user secrets
 secrets.json
 
