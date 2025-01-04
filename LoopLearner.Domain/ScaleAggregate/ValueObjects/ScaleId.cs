@@ -10,6 +10,6 @@ public record ScaleId : IValueObject
     {
         Value = value;
     }
-    public static ScaleId Create(Guid value) => new(value);
+
     public static ScaleId CreateNew() => new(Guid.NewGuid());
 }
