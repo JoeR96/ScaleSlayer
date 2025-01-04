@@ -3,6 +3,9 @@ interface NotePosition {
     fretNumber: number;
 }
 
+interface GuitarNotes {
+    notes: GuitarNote[];
+}
 interface GuitarNote {
     note: string;
     position: NotePosition;

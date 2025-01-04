@@ -87,7 +87,7 @@ namespace LoopLearner.Infrastructure
             services.AddDbContext<LoopLearnerDbContext>(options =>
             {
                 var connectionString = configuration.GetConnectionString("DatabaseConnectionString");
-                options.UseSqlite(connectionString, b => b.MigrationsAssembly("LoopLearner.Web.Server"));
+                options.UseNpgsql(connectionString, b => b.MigrationsAssembly("LoopLearner.Web.Server"));
             });
 
             services.AddScoped<PublishDomainEventInterceptor>();

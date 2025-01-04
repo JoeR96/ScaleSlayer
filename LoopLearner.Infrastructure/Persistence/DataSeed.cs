@@ -63,8 +63,6 @@ public static class DataSeed
             FretNote.CreateNew(Note.C, NotePosition.CreateNew(6, 20)),
             FretNote.CreateNew(Note.CSharp, NotePosition.CreateNew(6, 21)),
             FretNote.CreateNew(Note.D, NotePosition.CreateNew(6, 22)),
-            FretNote.CreateNew(Note.DSharp, NotePosition.CreateNew(6, 23)),
-            FretNote.CreateNew(Note.E, NotePosition.CreateNew(6, 24)),
 
             FretNote.CreateNew(Note.A, NotePosition.CreateNew(5, 0)),
             FretNote.CreateNew(Note.ASharp, NotePosition.CreateNew(5, 1)),
@@ -89,8 +87,6 @@ public static class DataSeed
             FretNote.CreateNew(Note.F, NotePosition.CreateNew(5, 20)),
             FretNote.CreateNew(Note.FSharp, NotePosition.CreateNew(5, 21)),
             FretNote.CreateNew(Note.G, NotePosition.CreateNew(5, 22)),
-            FretNote.CreateNew(Note.GSharp, NotePosition.CreateNew(5, 23)),
-            FretNote.CreateNew(Note.A, NotePosition.CreateNew(5, 24)),
 
             FretNote.CreateNew(Note.D, NotePosition.CreateNew(4, 0)),
             FretNote.CreateNew(Note.DSharp, NotePosition.CreateNew(4, 1)),
@@ -115,8 +111,6 @@ public static class DataSeed
             FretNote.CreateNew(Note.ASharp, NotePosition.CreateNew(4, 20)),
             FretNote.CreateNew(Note.B, NotePosition.CreateNew(4, 21)),
             FretNote.CreateNew(Note.C, NotePosition.CreateNew(4, 22)),
-            FretNote.CreateNew(Note.CSharp, NotePosition.CreateNew(4, 23)),
-            FretNote.CreateNew(Note.D, NotePosition.CreateNew(4, 24)),
 
             FretNote.CreateNew(Note.G, NotePosition.CreateNew(3, 0)),
             FretNote.CreateNew(Note.GSharp, NotePosition.CreateNew(3, 1)),
@@ -141,8 +135,6 @@ public static class DataSeed
             FretNote.CreateNew(Note.DSharp, NotePosition.CreateNew(3, 20)),
             FretNote.CreateNew(Note.E, NotePosition.CreateNew(3, 21)),
             FretNote.CreateNew(Note.F, NotePosition.CreateNew(3, 22)),
-            FretNote.CreateNew(Note.FSharp, NotePosition.CreateNew(3, 23)),
-            FretNote.CreateNew(Note.G, NotePosition.CreateNew(3, 24)),
 
             FretNote.CreateNew(Note.B, NotePosition.CreateNew(2, 0)),
             FretNote.CreateNew(Note.C, NotePosition.CreateNew(2, 1)),
@@ -167,8 +159,6 @@ public static class DataSeed
             FretNote.CreateNew(Note.G, NotePosition.CreateNew(2, 20)),
             FretNote.CreateNew(Note.GSharp, NotePosition.CreateNew(2, 21)),
             FretNote.CreateNew(Note.A, NotePosition.CreateNew(2, 22)),
-            FretNote.CreateNew(Note.ASharp, NotePosition.CreateNew(2, 23)),
-            FretNote.CreateNew(Note.B, NotePosition.CreateNew(2, 24)),
 
             FretNote.CreateNew(Note.E, NotePosition.CreateNew(1, 0)),
             FretNote.CreateNew(Note.F, NotePosition.CreateNew(1, 1)),
@@ -193,8 +183,6 @@ public static class DataSeed
             FretNote.CreateNew(Note.C, NotePosition.CreateNew(1, 20)),
             FretNote.CreateNew(Note.CSharp, NotePosition.CreateNew(1, 21)),
             FretNote.CreateNew(Note.D, NotePosition.CreateNew(1, 22)),
-            FretNote.CreateNew(Note.DSharp, NotePosition.CreateNew(1, 23)),
-            FretNote.CreateNew(Note.E, NotePosition.CreateNew(1, 24))
         };
 
         await context.Notes.AddRangeAsync(notes);

@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using LoopLearner.Application.Contracts.Persistence;
+using LoopLearner.Application.Scales.Responses;
 using LoopLearner.Domain.Common.Entities;
 using LoopLearner.Domain.ScaleAggregate.ValueObjects;
 using LoopLearner.Domain.SongAggregate.ValueObjects;
@@ -7,31 +8,31 @@ using LoopLearner.Domain.SongAggregate.ValueObjects;
 namespace LoopLearner.Application.Scales.Queries;
 
 public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
-    : IRequestHandler<GetScaleNotesQuery, Result<Dictionary<ScaleBoxPosition, List<FretNote>>>>
+    : IRequestHandler<GetScaleNotesQuery, Result<ScaleNotesResponse>>
 {
-    public async Task<Result<Dictionary<ScaleBoxPosition, List<FretNote>>>> Handle(GetScaleNotesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<ScaleNotesResponse>> Handle(GetScaleNotesQuery request, CancellationToken cancellationToken)
     {
         int rootNoteOffset = GetRootNoteOffset(request.RootNote);
         var noteNames = GetScaleNoteNames(request.RootNote, request.ScaleType);
         var notes = await noteRepository.GetFretNotesByNamesAsync(noteNames, cancellationToken);
-        var boxNotes = GroupNotesIntoBoxes(notes.ToList(), request.ScaleType, rootNoteOffset);
-        
-        return Result.Success(boxNotes);
+        var boxNotes = GroupNotesIntoBoxes(notes.ToList(), rootNoteOffset);
+
+        return Result.Success(MapToDto(boxNotes));
     }
 
     private List<Note> GetScaleNoteNames(Note rootNote, ScaleType scaleType)
     {
         var scaleIntervals = new Dictionary<ScaleType, List<int>>
         {
-            { ScaleType.PentatonicMinor, new List<int> { 0, 3, 5, 7, 10 } },
-            { ScaleType.Major, new List<int> { 0, 2, 4, 5, 7, 9, 11 } },
-            { ScaleType.Minor, new List<int> { 0, 2, 3, 5, 7, 8, 10 } }
+            { ScaleType.PentatonicMinor, [0, 3, 5, 7, 10] },
+            { ScaleType.Major, [0, 2, 4, 5, 7, 9, 11] },
+            { ScaleType.Minor, [0, 2, 3, 5, 7, 8, 10] }
         };
 
         if (!scaleIntervals.TryGetValue(scaleType, out var intervals))
             throw new ArgumentException("Invalid scale type", nameof(scaleType));
 
-        var chromaticScale = new Note[]
+        var chromaticScale = new[]
         {
             Note.A, Note.ASharp, Note.B, Note.C, Note.CSharp, Note.D, Note.DSharp, 
             Note.E, Note.F, Note.FSharp, Note.G, Note.GSharp
@@ -44,12 +45,14 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
             .ToList();
 
         return notes;
+        
+        
     }
 
 
-    private Dictionary<ScaleBoxPosition, List<FretNote>> GroupNotesIntoBoxes(List<FretNote> notes, ScaleType scaleType, int rootNote)
+    private Dictionary<ScaleBoxPosition, List<FretNote>> GroupNotesIntoBoxes(List<FretNote> notes, int rootNote)
     {
-        var boxFretPositions = ResolveBoxFretPositions(scaleType, rootNote); 
+        var boxFretPositions = ResolveBoxFretPositions(rootNote); 
         var boxNotes = new Dictionary<ScaleBoxPosition, List<FretNote>>();
 
         foreach (var box in boxFretPositions)
@@ -67,7 +70,7 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
     }
 
 
-    private Dictionary<ScaleBoxPosition, List<FretRange>> ResolveBoxFretPositions(ScaleType scaleType, int rootNote, int totalFrets = 22)
+    private Dictionary<ScaleBoxPosition, List<FretRange>> ResolveBoxFretPositions(int rootNote, int totalFrets = 22)
     {
         var scaleIntervals = new Dictionary<ScaleBoxPosition, (int startOffset, int endOffset)>
         {
@@ -87,7 +90,12 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
 
             if (startFret < totalFrets && endFret <= totalFrets)
             {
-                boxes[box.Key] = new List<FretRange> { new FretRange(startFret, endFret) };
+                boxes[box.Key] = [new FretRange(startFret, endFret)];
+            }
+            else
+            {
+                boxes[box.Key] = [new FretRange(startFret, 22)];
+
             }
 
             while (startFret > 0)
@@ -116,9 +124,9 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
     }
 
 
-    public int GetRootNoteOffset(Note rootNote)
+    private int GetRootNoteOffset(Note rootNote)
     {
-        var chromaticScale = new Note[]
+        var chromaticScale = new[]
         {
             Note.E, Note.F, Note.FSharp, Note.G, Note.GSharp, Note.A, Note.ASharp, Note.B,
             Note.C, Note.CSharp, Note.D, Note.DSharp, Note.E
@@ -133,18 +141,21 @@ public class GetScaleNotesQueryHandler(INoteRepository noteRepository)
 
         return offset;
     }
-}
-
-public class FretRange
-{
-    public int MinFret { get; set; }
-    public int MaxFret { get; set; }
-
-    public FretRange(int minFret, int maxFret)
+    
+    private ScaleNotesResponse MapToDto(Dictionary<ScaleBoxPosition, List<FretNote>> scaleNotes)
     {
-        MinFret = minFret;
-        MaxFret = maxFret;
-    }
+        var mappedScaleNotes = new Dictionary<ScaleBoxPosition, List<FretNoteDto>>();
 
-    public override string ToString() => $"{MinFret}-{MaxFret}";
-}
+        foreach (var scaleNote in scaleNotes)
+        {
+            var mappedFretNotes = scaleNote.Value.Select(fretNote => new FretNoteDto(
+                fretNote.Note, 
+                new NotePositionDto(fretNote.Position.StringNumber, fretNote.Position.FretNumber)
+            )).ToList();
+
+            mappedScaleNotes.Add(scaleNote.Key, mappedFretNotes);
+        }
+
+        return new ScaleNotesResponse(mappedScaleNotes);
+    }
+} 

@@ -1,7 +1,6 @@
 using CSharpFunctionalExtensions;
-using LoopLearner.Domain.Common.Entities;
-using LoopLearner.Domain.Errors;
+using LoopLearner.Application.Scales.Responses;
 
 namespace LoopLearner.Application.Notes.Queries;
 
-public record GetAllNotesQuery() : IRequest<Result<IEnumerable<FretNote>, Error>>;
+public record GetAllNotesQuery : IRequest<Result<GetAllNotesResponse>>;

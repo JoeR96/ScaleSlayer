@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using LoopLearner.Application;
 using LoopLearner.Infrastructure;
@@ -84,7 +85,10 @@ using (var scope = app.Services.CreateScope())
 
     // Ensure the database is created and apply any migrations
     await context.Database.MigrateAsync();
-     // await DataSeed.SeedNotes(context);
+      // await DataSeed.SeedNotes(context);
 }
 
 app.Run();
+
+[ExcludeFromCodeCoverage]
+public partial class Program { }

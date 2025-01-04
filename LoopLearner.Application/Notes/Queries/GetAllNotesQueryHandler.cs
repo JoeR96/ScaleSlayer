@@ -1,28 +1,22 @@
 using CSharpFunctionalExtensions;
 using LoopLearner.Application.Contracts.Persistence;
-using LoopLearner.Application.Notes.Queries;
-using LoopLearner.Domain.Common.Entities;
-using LoopLearner.Domain.Errors;
-using LoopLearner.Domain.Errors.General;
+using LoopLearner.Application.Scales.Responses;
 
-namespace LoopLearner.Application.Songs.Queries;
+namespace LoopLearner.Application.Notes.Queries;
 
-public class GetAllNotesQueryHandler : IRequestHandler<GetAllNotesQuery, Result<IEnumerable<FretNote>, Error>>
+public class GetAllNotesQueryHandler(INoteRepository noteRepository)
+    : IRequestHandler<GetAllNotesQuery, Result<GetAllNotesResponse>>
 {
-    private readonly INoteRepository _noteRepository;
+    private readonly INoteRepository _noteRepository = noteRepository ?? throw new ArgumentNullException(nameof(noteRepository));
 
-    public GetAllNotesQueryHandler(INoteRepository noteRepository)
+    public async Task<Result<GetAllNotesResponse>> Handle(GetAllNotesQuery request, CancellationToken cancellationToken)
     {
-        _noteRepository = noteRepository ?? throw new ArgumentNullException(nameof(noteRepository));
-    }
+        var fretNotes = await _noteRepository.GetAllNotesAsync(cancellationToken);
 
-    public async Task<Result<IEnumerable<FretNote>, Error>> Handle(GetAllNotesQuery request, CancellationToken cancellationToken)
-    {
-        var notes = await _noteRepository.GetAllNotesAsync(cancellationToken);
+        var fretNoteDtos = fretNotes.Select(note => new FretNoteDto(note.Note, new NotePositionDto(note.Position.StringNumber, note.Position.FretNumber)));
 
-        if (!notes.Any())
-            return new NotFoundError("No notes were found.");
-
-        return notes.ToList();
+        var response = new GetAllNotesResponse(fretNoteDtos);
+        
+        return Result.Success(response);
     }
 }

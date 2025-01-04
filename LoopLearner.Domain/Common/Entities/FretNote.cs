@@ -27,6 +27,4 @@ public class FretNote : Entity<NoteId>
     {
         Position = newPosition;
     }
-
-    public override string ToString() => $"{Note} on {Position}";
 }

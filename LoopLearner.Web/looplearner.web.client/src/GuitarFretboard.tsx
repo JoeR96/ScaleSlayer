@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {Note, ScaleType} from "./enums";
 
-
 const GuitarFretboard: React.FC = () => {
-    const [notes, setNotes] = useState<GuitarNote[] | undefined>(undefined);
+    const [notes, setNotes] = useState<GuitarNotes | undefined>(undefined);
     const [scaleNotes, setScaleNotes] = useState<ScaleBox | undefined>(undefined);
     const [selectedBoxes, setSelectedBoxes] = useState<string[]>([]);
     const [showScale, setShowScale] = useState<boolean>(false);
@@ -11,41 +10,31 @@ const GuitarFretboard: React.FC = () => {
     const [selectedScaleType, setSelectedScaleType] = useState<ScaleType>(ScaleType.PentatonicMinor);
 
     useEffect(() => {
-        const populateNotesData = async () => {
+        (async () => {
             try {
-                const response = await fetch('api/notes/notes');
-                if (response.ok) {
-                    const data = await response.json();
-                    setNotes(data);
+                const notesResponse = await fetch('api/notes/notes');
+                if (notesResponse.ok) {
+                    const notesData = await notesResponse.json();
+                    setNotes(notesData);
                 } else {
-                    console.error('Failed to fetch notes:', response.statusText);
+                    console.error('Failed to fetch notes:', notesResponse.statusText);
+                }
+
+                const scaleResponse = await fetch(`api/scales/${selectedRootNote}/${selectedScaleType}`);
+                if (scaleResponse.ok) {
+                    const scaleData = await scaleResponse.json();
+                    console.log('Fetched scale data:', scaleData); // Log the actual data
+                    console.log(scaleData.scaleNotes);
+                    setScaleNotes(scaleData.scaleNotes);
+                } else {
+                    console.error('Failed to fetch scale notes:', scaleResponse.statusText);
                 }
             } catch (error) {
-                console.error('Error fetching notes:', error);
+                console.error('Error in useEffect:', error);
             }
-        };
-
-        const populateScaleData = async () => {
-            try {
-                const response = await fetch(`api/scales/${selectedRootNote}-${selectedScaleType}`);
-
-                if (response.ok) {
-                    // Read the response body as JSON
-                    const data = await response.json();
-                    console.log('Fetched scale data:', data); // Log the actual data
-                    setScaleNotes(data);
-                } else {
-                    console.error('Failed to fetch scale notes:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error fetching scale notes:', error);
-            }
-        };
-        
-        populateNotesData();
-        populateScaleData();
-        
+        })();
     }, [selectedRootNote, selectedScaleType]);
+
 
     const getNoteColor = (note: string) => {
         const colors: { [key: string]: string } = {
@@ -65,7 +54,7 @@ const GuitarFretboard: React.FC = () => {
         return colors[note] || '#000000'; // Default to black if note name isn't recognized
     };
 
-    const formatnote = (note: string) => {
+    const formatNote = (note: string) => {
         if (note.includes('Sharp')) {
             return note[0] + '#';
         }
@@ -84,14 +73,6 @@ const GuitarFretboard: React.FC = () => {
         }
     };
 
-    const handleSelectAllBoxes = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.checked) {
-            setSelectedBoxes(['Box1', 'Box2', 'Box3', 'Box4', 'Box5']);
-        } else {
-            setSelectedBoxes([]);
-        }
-    };
-
     const strings = ['E', 'A', 'D', 'G', 'B', 'E'].reverse();
     const totalFrets = 23;
     const fretboardWidth = 800;
@@ -100,17 +81,9 @@ const GuitarFretboard: React.FC = () => {
         return <p>Loading notes and chords...</p>;
     }
 
-    const notesToDisplay = showScale
-        ? selectedBoxes.flatMap((box) => scaleNotes[box as keyof ScaleBox])
-        : notes;
-
-    const getFretRange = (chord: Chord) => {
-        const frets = chord.notes.map((note) => note.position.fretNumber);
-        return {
-            lowestFret: Math.min(...frets),
-            highestFret: Math.max(...frets)
-        };
-    };
+    const notesToDisplay: GuitarNotes = showScale
+        ? { notes: selectedBoxes.flatMap((box) => scaleNotes[box as keyof ScaleBox]) }
+        : notes || { notes: [] };
 
     const handleRootNoteChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedRootNote(e.target.value as Note);
@@ -201,32 +174,35 @@ const GuitarFretboard: React.FC = () => {
                         </text>
                     </g>
                 ))}
+                {notesToDisplay.notes.map((note, index) => {
+                    //console.log(selectedBoxes);
+                    return (
+                        <g key={index}>
+                            <circle
+                                cx={note.position.fretNumber * (fretboardWidth / totalFrets) + (fretboardWidth / totalFrets) / 2}
+                                cy={30 + (note.position.stringNumber - 1) * 25}
+                                r="10"
+                                fill={getNoteColor(note.note)}
+                                stroke="black"
+                                strokeWidth="2"
+                            >
+                                <title>{note.note}</title>
+                            </circle>
 
-                {notesToDisplay.map((note, index) => (
-                    <g key={index}>
-                        <circle
-                            cx={note.position.fretNumber * (fretboardWidth / totalFrets) + (fretboardWidth / totalFrets) / 2}
-                            cy={30 + (note.position.stringNumber - 1) * 25}
-                            r="10"
-                            fill={getNoteColor(note.note)}
-                            stroke="black"
-                            strokeWidth="2"
-                        >
-                            <title>{note.note}</title>
-                        </circle>
+                            <text
+                                x={note.position.fretNumber * (fretboardWidth / totalFrets) + (fretboardWidth / totalFrets) / 2}
+                                y={30 + (note.position.stringNumber - 1) * 25 + 4}
+                                fill="white"
+                                fontSize="10"
+                                textAnchor="middle"
+                                style={{userSelect: 'none'}}
+                            >
+                                {formatNote(note.note)}
+                            </text>
+                        </g>
+                    );
+                })}
 
-                        <text
-                            x={note.position.fretNumber * (fretboardWidth / totalFrets) + (fretboardWidth / totalFrets) / 2}
-                            y={30 + (note.position.stringNumber - 1) * 25 + 4}
-                            fill="white"
-                            fontSize="10"
-                            textAnchor="middle"
-                            style={{userSelect: 'none'}}
-                        >
-                            {formatnote(note.note)}
-                        </text>
-                    </g>
-                ))}
             </svg>
 
             {showScale && (
