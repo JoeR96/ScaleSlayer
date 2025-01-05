@@ -11,7 +11,6 @@ export const fetchNotesHook = () => {
                 if (notesResponse.ok) {
                     const notesData = await notesResponse.json();
                     setSelectedNotes(notesData);
-                    console.log(selectedNotes)
                 } else {
                     console.error('Failed to fetch notes:', notesResponse.statusText);
                 }
