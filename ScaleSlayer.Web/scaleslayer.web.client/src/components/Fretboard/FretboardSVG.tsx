@@ -8,7 +8,7 @@ const FretboardSVG: React.FC = ({ }) => {
     const { showScaleNotes, selectedScaleNotes, selectedScaleBoxes, selectedNotes  } = useControlsBoundedStore();
     const strings = ['E', 'A', 'D', 'G', 'B', 'E'].reverse();
     const totalFrets = 23;
-    const fretboardWidth = 1600;
+    const fretboardWidth = 1440;
     const fretboardHeight = 400;
 
     const notesToDisplay: GuitarNotes = showScaleNotes
@@ -34,8 +34,8 @@ const FretboardSVG: React.FC = ({ }) => {
             {strings.map((stringLabel, index) => (
                 <text
                     key={index}
-                    x="-30"
-                    y={45 + index * 50 + 4}
+                    x="-22.5"
+                    y={75 + index * 50 + 4}
                     style={{ fill: 'white', fontWeight: 'bold' }}
                     fontSize="24"
                     textAnchor="middle"
@@ -47,7 +47,7 @@ const FretboardSVG: React.FC = ({ }) => {
             {strings.map((_, index) => (
                 <line
                     key={index}
-                    x1="60"
+                    x1="-60"
                     y1={45 + index * 50}
                     x2={fretboardWidth}
                     y2={45 + index * 50}
@@ -62,7 +62,7 @@ const FretboardSVG: React.FC = ({ }) => {
                         x1={index * (fretboardWidth / totalFrets)}
                         y1="0"
                         x2={index * (fretboardWidth / totalFrets)}
-                        y2={fretboardHeight}
+                        y2={fretboardHeight - 50}
                         stroke="black"
                         strokeWidth="2"
                     />

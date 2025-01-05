@@ -22,21 +22,24 @@ const Metronome: React.FC = () => {
     };
 
     return (
-        <div>
+        <div style={{paddingLeft: '50px'}}>
             <h2>Metronome</h2>
-            <label>
-                BPM:
-                <input
-                    type="number"
-                    value={bpm}
-                    min={30}
-                    max={300}
-                    onChange={(e) => setBpm(Number(e.target.value))}
-                />
-            </label>
-            <button onClick={toggleMetronome}>
-                {isPlaying ? 'Stop' : 'Start'}
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center',  marginTop: '10px' }}>
+                <label>
+                    BPM:
+                    <input
+                        type="number"
+                        value={bpm}
+                        min={30}
+                        max={300}
+                        onChange={(e) => setBpm(Number(e.target.value))}
+                        style={{ marginLeft: '5px', marginRight: '5px' }}
+                    />
+                </label>
+                <button onClick={toggleMetronome} style={{ padding: '5px 10px' }}>
+                    {isPlaying ? 'Stop' : 'Start'}
+                </button>
+            </div>
         </div>
     );
 };
