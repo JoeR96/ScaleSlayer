@@ -1,5 +1,5 @@
 import './App.css';
-import GuitarFretboard from "./GuitarFretboard";
+import GuitarFretboard from "./components/Fretboard/GuitarFretboard";
 
 function App() {
     return (

@@ -35,7 +35,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         var dbContext = scope.ServiceProvider.GetRequiredService<ScaleSlayerDbContext>();
         await dbContext.Database.MigrateAsync();
         await DataSeed.SeedNotes(dbContext);
-
     }
     
     public new async Task DisposeAsync() => await _postgresContainer.DisposeAsync();

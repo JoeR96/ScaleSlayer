@@ -13,7 +13,7 @@ export enum Note {
     GSharp = "GSharp"
 }
 
-export enum ScaleType {
+export enum Scale {
     Major = "Major",
     Minor = "Minor",
     HarmonicMinor = "HarmonicMinor",
