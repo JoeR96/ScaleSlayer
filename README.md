@@ -5,7 +5,7 @@ This project follows a Domain Driven Design approach and serves as a repository 
 
 ## Short term Todo
 
-- [] Restructure the UI in to smaller, reusable components.
+- [x] Restructure the UI in to smaller, reusable components.
 - [] Setup a VPS to host the application.
 - [] Setup a YAML pipeline to automate deployments when merging to master.
 - [] Add logging using the ELK stack.
