@@ -7,7 +7,7 @@ const Metronome: React.FC = () => {
 
     const toggleMetronome = async () => {
         if (!isPlaying) {
-            await Tone.start(); // Required for browser interaction
+            await Tone.start();
             const synth = new Tone.MembraneSynth().toDestination();
             const loop = new Tone.Loop((time) => {
                 synth.triggerAttackRelease('C2', '8n', time);
