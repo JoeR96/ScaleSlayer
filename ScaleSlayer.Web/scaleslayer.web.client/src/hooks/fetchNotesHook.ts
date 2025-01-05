@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import {useControlsBoundedStore} from "../components/Controls/ControlsBoundedStore";
 
 export const fetchNotesHook = () => {
-    const { selectedNotes, setSelectedNotes, selectedRootNote, selectedScale } = useControlsBoundedStore();
+    const { selectedNotes, setSelectedNotes,  } = useControlsBoundedStore();
     useEffect(() => {
         const fetchNotes = async () => {
             try {
@@ -19,7 +19,7 @@ export const fetchNotesHook = () => {
             }
         };
 
-        fetchNotes();
+        fetchNotes().catch((error) => console.error('Error fetching notes:', error));
     }, []);
 
     return selectedNotes;

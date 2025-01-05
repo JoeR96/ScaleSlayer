@@ -18,7 +18,7 @@ export const fetchScaleNotesHook = () => {
         };
 
         if (selectedRootNote && selectedScale) {
-            fetchScaleNotes();
+            fetchScaleNotes().catch((error) => console.error('Error fetching scale notes:', error));
         }
     }, [selectedRootNote, selectedScale]); 
 
