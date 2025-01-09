@@ -11,24 +11,25 @@ const baseFolder = env.APPDATA !== undefined && env.APPDATA !== ''
     ? `${env.APPDATA}/ASP.NET/https`
     : `${env.HOME}/.aspnet/https`;
 
-const certificateName = 'looplearner.web.client';
-const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
-const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
 
-// If certificates do not exist, generate them using 'dotnet dev-certs'
-if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
-    if (child_process.spawnSync('dotnet', [
-        'dev-certs',
-        'https',
-        '--export-path',
-        certFilePath,
-        '--format',
-        'Pem',
-        '--no-password'
-    ], { stdio: 'inherit' }).status !== 0) {
-        throw new Error('Could not create certificate.');
-    }
-}
+// const certificateName = 'scaleslayer.web.client';
+// const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
+// const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
+//
+// // If certificates do not exist, generate them using 'dotnet dev-certs'
+// if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
+//     if (child_process.spawnSync('dotnet', [
+//         'dev-certs',
+//         'https',
+//         '--export-path',
+//         certFilePath,
+//         '--format',
+//         'Pem',
+//         '--no-password'
+//     ], { stdio: 'inherit' }).status !== 0) {
+//         throw new Error('Could not create certificate.');
+//     }
+// }
 
 // Target URL for the backend, depending on the environment variables
 const target = env.ASPNETCORE_HTTPS_PORT
@@ -60,9 +61,5 @@ export default defineConfig({
             },
         },
         port: 5173,
-        https: {
-            key: fs.readFileSync(keyFilePath),
-            cert: fs.readFileSync(certFilePath)
-        }
     }
 });

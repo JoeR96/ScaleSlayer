@@ -11,7 +11,6 @@ using ScaleSlayer.Web.Server.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers()
         .AddJsonOptions(options =>
         {
@@ -62,12 +61,11 @@ builder.Services.AddSwaggerGen(setupAction =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UsePathBase("/scale-slayer-api");
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseExceptionMiddlware();
 app.UseHttpsRedirection();
@@ -78,14 +76,15 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ScaleSlayerDbContext>();
-
-    await context.Database.MigrateAsync();
-    await DataSeed.SeedNotes(context);
-}
+//There is cool stuff to figure out before I get back to this.
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     var context = services.GetRequiredService<ScaleSlayerDbContext>();
+//
+//     await context.Database.MigrateAsync();
+//     await DataSeed.SeedNotes(context);
+// }
 
 app.Run();
 

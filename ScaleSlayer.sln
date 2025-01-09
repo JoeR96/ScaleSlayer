@@ -19,7 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScaleSlayer.UnitTests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScaleSlayer.Web.Server", "ScaleSlayer.Web\ScaleSlayer.Web.Server\ScaleSlayer.Web.Server.csproj", "{41D40957-D75D-472A-AC21-7595CF114DB1}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "scaleslayer.web.client", "ScaleSlayer.Web\scaleslayer.web.client\scaleslayer.web.client.esproj", "{D6D3A657-5DC0-4CB8-8FDF-BBAC955A3F70}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3D91B14D-A7CB-4C44-AE9E-0CE511905F2B}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,10 +58,6 @@ Global
 		{41D40957-D75D-472A-AC21-7595CF114DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41D40957-D75D-472A-AC21-7595CF114DB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41D40957-D75D-472A-AC21-7595CF114DB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D6D3A657-5DC0-4CB8-8FDF-BBAC955A3F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6D3A657-5DC0-4CB8-8FDF-BBAC955A3F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6D3A657-5DC0-4CB8-8FDF-BBAC955A3F70}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6D3A657-5DC0-4CB8-8FDF-BBAC955A3F70}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
