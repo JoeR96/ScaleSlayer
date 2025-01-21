@@ -6,7 +6,7 @@ export const fetchNotesHook = () => {
     useEffect(() => {
         const fetchNotes = async () => {
             try {
-                const notesResponse = await fetch('scale-slayer-api/api/notes/notes');
+                const notesResponse = await fetch('https://enjoeneer.dev/scale-slayer-api/api/notes/notes');
 
                 if (notesResponse.ok) {
                     const notesData = await notesResponse.json();

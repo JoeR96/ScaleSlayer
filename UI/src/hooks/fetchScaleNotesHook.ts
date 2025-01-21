@@ -7,7 +7,7 @@ export const fetchScaleNotesHook = () => {
     useEffect(() => {
         const fetchScaleNotes = async () => {
             try {
-                const scaleResponse = await fetch(`scale-slayer-api/api/scales/${selectedRootNote}/${selectedScale}`);
+                const scaleResponse = await fetch(`https://enjoeneer.dev/scale-slayer-api/api/scales/${selectedRootNote}/${selectedScale}`);
                 if (scaleResponse.ok) {
                     const scaleData = await scaleResponse.json();
                     setSelectedScaleNotes(scaleData.scaleNotes);

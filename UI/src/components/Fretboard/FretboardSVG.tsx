@@ -1,11 +1,11 @@
 import React from 'react';
-import {formatNote, getNoteColor} from "../../utils/noteUtils";
-import {useControlsBoundedStore} from "../Controls/ControlsBoundedStore";
+import { formatNote, getNoteColor } from "../../utils/noteUtils";
+import { useControlsBoundedStore } from "../Controls/ControlsBoundedStore";
+import ControlPanel from "../Controls/ControlPanel";
+import ScaleBoxSelect from "../Controls/ScaleBoxSelect/ScaleBoxSelect";
 
-
-const FretboardSVG: React.FC = ({ }) => {
-    
-    const { showScaleNotes, selectedScaleNotes, selectedScaleBoxes, selectedNotes  } = useControlsBoundedStore();
+const FretboardSVG: React.FC = () => {
+    const { showScaleNotes, selectedScaleNotes, selectedScaleBoxes, selectedNotes } = useControlsBoundedStore();
     const strings = ['E', 'A', 'D', 'G', 'B', 'E'].reverse();
     const totalFrets = 23;
     const fretboardWidth = 1000;
@@ -24,10 +24,11 @@ const FretboardSVG: React.FC = ({ }) => {
             return { notes };
         })()
         : { notes: selectedNotes.notes || [] };
-    return (
+
+    return (<>
         <svg
-            width={fretboardWidth}
-            height={fretboardHeight}
+            width="auto"  // Set width and height to 100% for responsiveness
+            height="auto"
             viewBox={`-40 0 ${fretboardWidth + 40} ${fretboardHeight}`}
             xmlns="http://www.w3.org/2000/svg"
         >
@@ -106,7 +107,9 @@ const FretboardSVG: React.FC = ({ }) => {
                 );
             })}
         </svg>
-    );
+            {showScaleNotes && <ScaleBoxSelect />}
+        </>
+);
 };
 
 export default FretboardSVG;

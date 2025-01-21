@@ -1,27 +1,6 @@
 ﻿version: '3.8'
 
 services:
-  traefik:
-    image: traefik:v2.10
-    command:
-      - "--providers.docker"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entryPoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=elliott@zenful.site"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/var/lib/traefik:/letsencrypt"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    networks:
-      - app-network
-  
   scaleslayer.web.server:
     image: scaleslayer.web.server
     build:
@@ -34,15 +13,16 @@ services:
       - "traefik.http.routers.backend.tls=true"
       - "traefik.http.routers.backend.tls.certresolver=myresolver"
       - "traefik.http.services.backend.loadbalancer.server.port=8080"
+    networks:
+      - traefik-network
+
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=scaleslayer;Username=postgres;Password=postgres
       - DatabaseConnectionString=Host=postgres;Port=5432;Username=postgres;Password=postgres;Database=scale-slayer
     depends_on:
       - postgres
-    networks:
-      - app-network
-  
+      
   frontend:
     build:
       context: ./UI
@@ -55,7 +35,7 @@ services:
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.routers.frontend.tls.certresolver=myresolver"
     networks:
-      - app-network
+      - traefik-network
 
   postgres:
     image: postgres:15
@@ -66,11 +46,13 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - app-network
+      - traefik-network
 
 volumes:
   postgres-data:
-
+    
 networks:
+  traefik-network:
+    external: true
   app-network:
     driver: bridge

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useControlsBoundedStore } from "../Controls/ControlsBoundedStore";
 import { fetchNotesHook } from "../../hooks/fetchNotesHook";
 import { fetchScaleNotesHook } from "../../hooks/fetchScaleNotesHook";
@@ -11,57 +11,48 @@ const GuitarFretboard: React.FC = () => {
     const { selectedNotes, selectedScaleNotes, selectedScaleBoxes, showScaleNotes } = useControlsBoundedStore();
     fetchNotesHook();
     fetchScaleNotesHook();
-    
+
+    const [scale, setScale] = useState(1);
+
+    useEffect(() => {
+        const handleResize = () => {
+            // Adjust scale based on window size (keeping fretboard proportion)
+            const scaleValue = Math.min(window.innerWidth / 1600, 1);  // Ensure scale doesn't exceed 1
+            setScale(scaleValue);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Run once on initial load
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     if (!selectedNotes || !selectedScaleNotes) {
         return <p>Loading notes and chords...</p>;
     }
-    
-    //This is not the way, but this styling will do for now until I figure out a proper design
+
     return (
-        <div id="app">
-            <h2 style={{
-                fontSize: '8rem',          
-                fontWeight: 'bold',        
-                color: 'white',            
-                textAlign: 'center',       
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',    
-                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)', 
-                margin: '20px 0',          
-                paddingBottom: '100px',
-                background: 'linear-gradient(90deg, #ff8c00, #ff4500)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent', 
-            }}>
-                Scale Slayer
-            </h2>
-
-
-            <div style={{display: "flex"}}>
-                <div style={{flex: 0.8, padding: "20px, width: 100%"}}>
-                    <FretboardSVG/>
-                    {showScaleNotes && <ScaleBoxSelect/>}
-
+        <div id="app" style={{ width: "100%", height: "100%" }}>
+            <div style={{ display: "flex", transform: `scale(${scale})`, transformOrigin: "top left", height: '100%' }}>
+                <div style={{ flex: 2, padding: "20px", width: "100%" }}>
+                    <FretboardSVG />
                 </div>
-                <div style={{flex: 0.2}}>
+                <div style={{ flex: 1, height: '100%' }}>
                     <div style={{
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
                         alignItems: "center",
                         paddingLeft: 50,
+                        height: '100%',
                     }}>
-                        <ControlPanel/>
-                        <div style={{paddingBottom: 10, paddingRight: 50}}>
-                            <Metronome/>
-                        </div>
+                        <ControlPanel />
+             
                     </div>
                 </div>
             </div>
-
         </div>
     );
-
 };
 
 export default GuitarFretboard;

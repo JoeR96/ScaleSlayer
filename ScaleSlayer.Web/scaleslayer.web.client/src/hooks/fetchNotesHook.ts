@@ -4,7 +4,7 @@ import {useControlsBoundedStore} from "../components/Controls/ControlsBoundedSto
 export const fetchNotesHook = () => {
     const { selectedNotes, setSelectedNotes,  } = useControlsBoundedStore();
     useEffect(() => {
-        const fetchNotes = async () => {
+        const fetchNotesrider = async () => {
             try {
                 const notesResponse = await fetch('api/notes/notes');
 
