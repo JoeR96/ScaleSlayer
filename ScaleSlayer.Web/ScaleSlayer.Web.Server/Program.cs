@@ -76,15 +76,15 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors();
 
-//There is cool stuff to figure out before I get back to this.
-// using (var scope = app.Services.CreateScope())
-// {
-//     var services = scope.ServiceProvider;
-//     var context = services.GetRequiredService<ScaleSlayerDbContext>();
-//
-//     await context.Database.MigrateAsync();
-//     await DataSeed.SeedNotes(context);
-// }
+//There is naughtier stuff to figure out before I get back to this.
+ using (var scope = app.Services.CreateScope())
+ {
+     var services = scope.ServiceProvider;
+     var context = services.GetRequiredService<ScaleSlayerDbContext>();
+
+     await context.Database.MigrateAsync();
+     await DataSeed.SeedNotes(context);
+ }
 
 app.Run();
 
