@@ -13,6 +13,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -24,27 +35,33 @@ a:hover {
 
 body {
   margin: 0;
+  padding: 0;
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center;    /* Center vertically */
+  justify-content: flex-start;
+  align-items: flex-start;
   min-width: 320px;
+  width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
+/* Mobile-first approach */
 #app {
   width: 100%;
-  max-width: 1200px; /* Set a max width */
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
-  padding: 20px;
+  padding: 0;
+  gap: 0;
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: clamp(1.8em, 5vw, 3.2em);
   line-height: 1.1;
+  margin: 0.5em 0;
 }
 
 button {
@@ -56,14 +73,40 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.25s ease;
+  min-height: 44px; /* Minimum touch target size for mobile */
 }
 button:hover {
   border-color: #646cff;
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(0);
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 2px solid #646cff;
+  outline-offset: 2px;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  body {
+    justify-content: center;
+    align-items: center;
+  }
+
+  #app {
+    padding: 0;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1024px) {
+  #app {
+    max-width: 1400px;
+    padding: 0;
+  }
 }
 
 @media (prefers-color-scheme: light) {

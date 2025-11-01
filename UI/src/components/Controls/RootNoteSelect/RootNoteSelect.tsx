@@ -14,21 +14,48 @@ const RootNoteSelect = () => {
         setSelectedRootNote(note);
     };
 
+    const containerStyle: React.CSSProperties = {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '6px',
+        width: '100%',
+        maxWidth: '100%',
+    };
+
+    const getButtonStyle = (note: Note): React.CSSProperties => ({
+        padding: '7px 10px',
+        fontSize: '13px',
+        fontWeight: '600',
+        border: note === selectedRootNote ? '1.5px solid #ff8c00' : '1.5px solid rgba(255, 255, 255, 0.15)',
+        borderRadius: '6px',
+        backgroundColor: note === selectedRootNote ? '#ff8c00' : 'rgba(255, 255, 255, 0.03)',
+        color: note === selectedRootNote ? 'white' : 'rgba(255, 255, 255, 0.87)',
+        cursor: 'pointer',
+        transition: 'all 0.15s ease',
+        minHeight: '34px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    });
+
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1em' }}>
+        <div style={containerStyle}>
             {notes.map((note) => (
                 <button
                     key={note}
                     onClick={() => handleRootNoteClick(note)}
-                    style={{
-                        padding: '1px',
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        border: note === selectedRootNote ? '2px solid orange' : '2px solid gray',
-                        borderRadius: '5px',
-                        backgroundColor: note === selectedRootNote ? 'orange' : '#f0f0f0',
-                        color: note === selectedRootNote ? 'white' : 'black',
-                        cursor: 'pointer',
+                    style={getButtonStyle(note)}
+                    onMouseEnter={(e) => {
+                        if (note !== selectedRootNote) {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                        }
+                    }}
+                    onMouseLeave={(e) => {
+                        if (note !== selectedRootNote) {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                        }
                     }}
                 >
                     {note}

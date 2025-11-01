@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\Users\\Administrator\\RiderProjects\\ScaleSlayer\\ScaleSlayer.Application''\")",
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\Users\\Administrator\\RiderProjects\\ScaleSlayer\\ScaleSlayer.Domain''\")",
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\Users\\Administrator\\RiderProjects\\ScaleSlayer\\ScaleSlayer.Infrastructure''\")",
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\Users\\Administrator\\RiderProjects\\ScaleSlayer\\ScaleSlayer.Web''\")",
+      "Bash(powershell -Command \"Remove-Item -Recurse -Force ''C:\\Users\\Administrator\\RiderProjects\\ScaleSlayer\\tests''\")",
+      "Bash(powershell -Command:*)",
+      "Bash(npm install:*)",
+      "Bash(npm test)",
+      "Bash(npm test:*)",
+      "Bash(git log:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
