@@ -5,5 +5,5 @@ export default defineConfig({
     plugins: [
         react(),
     ],
-    base: '/scale-slayer'
+    base: '/'
 });
