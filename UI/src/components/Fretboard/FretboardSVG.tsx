@@ -28,18 +28,19 @@ const FretboardSVG: React.FC = ({ }) => {
     const containerStyle: React.CSSProperties = {
         width: '100%',
         maxWidth: '100%',
-        overflowX: 'auto',
-        overflowY: 'hidden',
+        overflow: 'hidden',
         display: 'flex',
         justifyContent: 'center',
-        padding: '8px 0',
-        WebkitOverflowScrolling: 'touch', // Smooth scrolling on iOS
+        padding: '4px',
+        WebkitOverflowScrolling: 'touch',
         boxSizing: 'border-box',
     };
 
     const svgWrapperStyle: React.CSSProperties = {
-        minWidth: '100%',
-        width: 'fit-content',
+        width: '100%',
+        maxWidth: '1400px',
+        display: 'flex',
+        justifyContent: 'center',
     };
 
     return (
@@ -53,9 +54,10 @@ const FretboardSVG: React.FC = ({ }) => {
                     xmlns="http://www.w3.org/2000/svg"
                     style={{
                         maxWidth: '100%',
+                        width: '100%',
                         height: 'auto',
-                        minWidth: '500px', // Minimum width for readability on mobile
                     }}
+                    className="fretboard-svg"
                 >
                     {strings.map((stringLabel, index) => (
                         <text
@@ -147,35 +149,25 @@ const FretboardSVG: React.FC = ({ }) => {
             </div>
 
             <style>{`
-                /* Custom scrollbar styling for better UX */
-                div[style*="overflowX"]::-webkit-scrollbar {
-                    height: 6px;
+                .fretboard-svg {
+                    min-width: 100%;
                 }
 
-                div[style*="overflowX"]::-webkit-scrollbar-track {
-                    background: rgba(255, 255, 255, 0.08);
-                    border-radius: 3px;
-                }
-
-                div[style*="overflowX"]::-webkit-scrollbar-thumb {
-                    background: rgba(255, 255, 255, 0.25);
-                    border-radius: 3px;
-                }
-
-                div[style*="overflowX"]::-webkit-scrollbar-thumb:hover {
-                    background: rgba(255, 255, 255, 0.4);
-                }
-
-                /* Increase size on larger screens */
                 @media (min-width: 768px) {
-                    svg[viewBox] {
-                        min-width: 650px !important;
+                    .fretboard-svg {
+                        min-width: 700px;
                     }
                 }
 
                 @media (min-width: 1024px) {
-                    svg[viewBox] {
-                        min-width: 850px !important;
+                    .fretboard-svg {
+                        min-width: 1000px;
+                    }
+                }
+
+                @media (min-width: 1400px) {
+                    .fretboard-svg {
+                        min-width: 1200px;
                     }
                 }
             `}</style>
