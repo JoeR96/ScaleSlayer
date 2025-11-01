@@ -19,24 +19,6 @@ const GuitarFretboard: React.FC = () => {
     //This is not the way, but this styling will do for now until I figure out a proper design
     return (
         <div id="app">
-            <h2 style={{
-                fontSize: '8rem',          
-                fontWeight: 'bold',        
-                color: 'white',            
-                textAlign: 'center',       
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',    
-                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)', 
-                margin: '20px 0',          
-                paddingBottom: '100px',
-                background: 'linear-gradient(90deg, #ff8c00, #ff4500)', 
-                WebkitBackgroundClip: 'text', 
-                WebkitTextFillColor: 'transparent', 
-            }}>
-                Scale Slayer
-            </h2>
-
-
             <div style={{display: "flex"}}>
                 <div style={{flex: 0.8, padding: "20px, width: 100%"}}>
                     <FretboardSVG/>

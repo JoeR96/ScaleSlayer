@@ -17,6 +17,6 @@ export const createBoundedScaleBoxSelectSlice: StateCreator<
     [],
     ScaleBoxSelectSlice
 > = (set) => ({
-    selectedScaleBoxes: [],
+    selectedScaleBoxes: ["Box2", "Box4"],
     setSelectedScaleBoxes: (scaleBoxes) => set({ selectedScaleBoxes: scaleBoxes }),
 });

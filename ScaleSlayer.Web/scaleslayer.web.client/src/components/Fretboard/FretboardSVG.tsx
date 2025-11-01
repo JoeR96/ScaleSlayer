@@ -26,9 +26,10 @@ const FretboardSVG: React.FC = ({ }) => {
         : { notes: selectedNotes.notes || [] };
     return (
         <svg
-            width={fretboardWidth}
-            height={fretboardHeight}
+            // Make the SVG responsive: scale to container width while preserving aspect ratio
+            style={{ width: '100%', height: 'auto', maxWidth: '100%', display: 'block' }}
             viewBox={`-40 0 ${fretboardWidth + 40} ${fretboardHeight}`}
+            preserveAspectRatio="xMidYMid meet"
             xmlns="http://www.w3.org/2000/svg"
         >
             {strings.map((stringLabel, index) => (

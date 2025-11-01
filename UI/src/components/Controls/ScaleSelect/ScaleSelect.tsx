@@ -22,7 +22,7 @@ const ScaleSelect = () => {
                     key={scale.value}
                     onClick={() => handleScaleClick(scale.value)}
                     style={{
-                        padding: '10px',
+                        padding: '1px',
                         fontSize: '16px',
                         fontWeight: 'bold',
                         border: scale.value === selectedScale ? '2px solid gray' : '2px solid gray',

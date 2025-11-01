@@ -6,7 +6,7 @@ namespace ScaleSlayer.Web.Server.Middlewares;
 public static class ExceptionMiddleware
 {
     public static IApplicationBuilder UseExceptionMiddlware(this IApplicationBuilder app)
-    {
+    {  
         app.UseExceptionHandler(appError =>
         {
             appError.Run(async context =>

@@ -20,11 +20,11 @@ const ShowScaleNoteSelect = () => {
                     key={String(option.value)}
                     onClick={() => handleToggle(option.value)}
                     style={{
-                        padding: '10px',
+                        padding: '1px',
                         fontSize: '16px',
                         fontWeight: 'bold',
                         border: option.value === showScaleNotes ? '2px solid gray' : '2px solid gray',
-                        borderRadius: '5px',
+                        borderRadius: '1px',
                         backgroundColor: option.value === showScaleNotes ? 'orange' : '#f0f0f0',
                         color: option.value === showScaleNotes ? 'white' : 'black',
                         cursor: 'pointer',

@@ -23,9 +23,8 @@ namespace ScaleSlayer.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager configuration)
         {
-            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-
-            services.AddPersistence(configuration)
+            services.AddSingleton<IDateTimeProvider, DateTimeProvider>()
+                .AddPersistence(configuration)
                 .AddAuth(configuration);
 
             return services;

@@ -15,7 +15,7 @@ export const createBoundedShowScaleNotesSelectSlice: StateCreator<
     [],
     ShowScaleNotesSelectSlice
 > = (set) => ({
-    showScaleNotes: false,
+    showScaleNotes: true,
     setShowScaleNote: (setShowScaleNote) => set({ showScaleNotes: setShowScaleNote }),
 });
 

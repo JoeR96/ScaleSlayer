@@ -21,7 +21,7 @@ const RootNoteSelect = () => {
                     key={note}
                     onClick={() => handleRootNoteClick(note)}
                     style={{
-                        padding: '10px',
+                        padding: '1px',
                         fontSize: '16px',
                         fontWeight: 'bold',
                         border: note === selectedRootNote ? '2px solid orange' : '2px solid gray',

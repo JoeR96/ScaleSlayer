@@ -1,0 +1,35 @@
+# docker-compose.override.yml
+version: '3.8'
+
+services:
+  # Disable Traefik in local dev
+  traefik:
+    profiles: ["disabled"]
+
+  # API (.NET backend)
+  scaleslayer.web.server:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=scaleslayer;Username=postgres;Password=postgres
+      - DatabaseConnectionString=Host=postgres;Port=5432;Username=postgres;Password=postgres;Database=scale-slayer
+    ports:
+      - "8080:8080"   # Access API via http://localhost:8080
+    labels: []         # Disable Traefik labels
+
+  # Frontend (Vite)
+  frontend:
+    command: ["npm", "run", "dev", "--", "--host"]
+    ports:
+      - "5173:5173"   # Access Vite via http://localhost:5173/scale-slayer
+    labels: []         # Disable Traefik labels
+    environment:
+      - VITE_API_URL=http://localhost:8080/scale-slayer-api
+    depends_on:
+      - scaleslayer.web.server
+
+  # Postgres unchanged
+  postgres:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: scaleslayer

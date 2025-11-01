@@ -28,5 +28,4 @@ public class ScaleTests
         result.Should().HaveCount(5);
         result.Should().Equal(expectedNotes);
     }
-
 }
